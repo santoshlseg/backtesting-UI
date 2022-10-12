@@ -1,0 +1,78 @@
+ <h2>Back testing UI</h2> 
+ <amber-loader *ngIf="loading"></amber-loader>
+<header>
+  <nav class="main">
+    <ul>
+      <li><a class="logo" href="#"><span>Refinitiv</span></a></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <carbon-sidebar-layout id="layout">
+    <coral-header slot="sidebar-header" level="1">Title</coral-header>
+    <coral-panel slot="sidebar-content">N
+      <quartz-layout>
+      <!-- <coral-select id="selectN" placeholder="Select the type of chart" (value-changed)="onSelect()"> -->
+        <coral-select id="selectN" placeholder="Select the type of chart" (click)="onSelect()">  
+      <coral-item value=1>1</coral-item>
+      <coral-item value=2>2</coral-item>
+      <coral-item value=3>3</coral-item>
+      <coral-item value=4>4</coral-item>
+      <coral-item value=5>5</coral-item>
+      <coral-item value=6>6</coral-item>
+      </coral-select>
+
+    </quartz-layout>
+     <quartz-layout >
+      <label>Date Range:</label>
+      <!-- <emerald-datetime-picker range duplex values="2022-10-01" (click)="onSelectFromDate()"> -->
+      <emerald-datetime-picker id="from-date" (click)="onSelectFromDate()">
+      </emerald-datetime-picker>
+    </quartz-layout>
+
+       <quartz-layout > 
+        <label>Date Range:</label>
+        <emerald-datetime-picker id="to-date" (click)="onSelectToDate()">
+        </emerald-datetime-picker>
+      </quartz-layout>
+
+      <!-- <quartz-layout>
+          <emerald-datetime-picker range duplex values="2019-01-01,2019-01-07"></emerald-datetime-picker>
+      </quartz-layout> Check on Monday   --> // 
+
+      <quartz-layout>Universe
+        <coral-select id="selectfrequency" placeholder="Select the Universe">
+          <coral-item value="10">Singapore</coral-item>
+          <coral-item value="20">HongKong</coral-item>
+          <coral-item value="30">Thailand</coral-item>
+          <coral-item value="40">Australia</coral-item>
+          <coral-item value="50">Malaysia</coral-item>
+        </coral-select>
+      </quartz-layout>
+
+      <quartz-layout>Generate Report
+        <coral-button toggles class="large" (click)="onSubmit()">Submit</coral-button>
+        
+      </quartz-layout>
+    </coral-panel>
+  
+
+    <coral-header slot="main-header" level="1">
+      <coral-button transparent slot="left" id="toggleBtn" icon="leftpanel-open"></coral-button>
+      <coral-button slot="right" transparent icon="settings"></coral-button>
+    </coral-header>
+    <coral-panel spacing slot="main-content">
+    <!-- <div *ngIf="multiple_chart"> -->
+     <div> 
+        <p>Coral Sapphire Interactive Multiple chart</p>
+        <sapphire-interactive-chart id="multiple"></sapphire-interactive-chart>
+    </div>
+    
+    </coral-panel>
+    <coral-panel spacing slot="main-content">
+    <emerald-grid id="grid"></emerald-grid>
+    </coral-panel>
+    
+  </carbon-sidebar-layout>
+

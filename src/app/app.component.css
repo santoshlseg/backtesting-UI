@@ -1,0 +1,153 @@
+h2{
+    text-align: center;
+    text-size-adjust: 50px;
+    text-decoration-color: coral;
+}
+
+header {
+    height: 50px;
+    background-color: #fff;
+}
+
+nav.main {
+    background-color:white;
+    /*border-bottom:  1px solid #eee;*/
+}
+
+nav.main ul {
+    margin: -10px 0 0 0;
+    padding: 0;
+}
+
+nav.main li {
+    list-style: none;
+    display: inline-block;
+    overflow: visible;
+}
+
+#logo{
+    width: 40px;
+    margin-right: 20px;
+}
+
+nav.main a {
+    color: #404040;
+    display: inline-block;
+    padding: 20px;
+    text-decoration: none;
+    vertical-align: bottom;
+    box-sizing: content-box;
+    border-bottom:  5px solid #fff;
+}
+
+nav.main a:hover {
+    border-bottom:  5px solid #001eff;
+}
+
+nav.main a.active {
+    color: #404040;
+    background-color: #fff;
+    border-radius: 5px 5px 0 0;
+    font-weight: 700;
+    outline: 0;
+    border-bottom:  5px solid #001eff;
+}
+
+nav.main a.logo {
+    width: 155px;
+    height:  40px;
+    display: inline-block;
+    background-color: transparent;
+    border-radius: 0;
+    margin-right: 50px;
+    border-bottom:  5px solid #fff;
+}
+
+a.logo span {
+    display: inline-block;
+    background-image: url(/assets/images/refinitiv.logo.strapline.svg);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    text-indent: -9999px;
+    width: 198px;
+    height: 78px;
+}
+
+label{
+    text-align: center;
+}
+.wrapper {
+    padding: 10px;
+    height: 500px;
+    line-height: normal;
+  }
+
+p{
+    font-size: 18px;
+    padding: 30px 10px 0px 0px;
+}
+
+coral-select {
+    width: 60%;
+}
+
+coral-item {
+    text-align: left; 
+}
+
+coral-number-field.value-input {
+    width: 60px;
+}
+
+
+body{
+    padding-bottom: 200px;
+}
+
+#logo{
+    width: 40px;
+    margin-right: 20px;
+}
+
+button{
+    display: block;
+    margin-top: 50px;
+}
+
+sapphire-interactive-chart {
+    width: 100%;
+    height: 300px;
+   }
+
+  .inner {
+    background-color: #e4e8ed;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .outer {
+    background-color: #d0d4db;
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  section {
+    height: 155px;
+    padding: 0 3px;
+  }
+
+  quartz-layout {
+    margin-bottom :20px;
+  }
+
+
+.large {
+  height: 30px;
+  min-width: 90px;
+  font-size: 100%;
+}
+
+emerald-grid {
+    height: 150px;
+  }
+
