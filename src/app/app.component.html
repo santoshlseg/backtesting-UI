@@ -9,51 +9,67 @@
 </header>
 
 
-  <carbon-sidebar-layout id="layout">
+  <carbon-sidebar-layout id="layout" sidebar-width="350px">
     <coral-header slot="sidebar-header" level="1">Title</coral-header>
-    <coral-panel slot="sidebar-content">N
-      <quartz-layout>
-      <!-- <coral-select id="selectN" placeholder="Select the type of chart" (value-changed)="onSelect()"> -->
-        <coral-select id="selectN" placeholder="Select the type of chart" (click)="onSelect()">  
-      <coral-item value=1>1</coral-item>
+    <coral-panel slot="sidebar-content"> <br>
+    <quartz-layout>
+      <label>Universe</label><br>
+      <coral-select id="selectUniverse" >
+        <coral-item value="10" selected>Singapore</coral-item>
+        <coral-item value="20">HongKong</coral-item>
+        <coral-item value="30">Thailand</coral-item>
+        <coral-item value="40">Australia</coral-item>
+        <coral-item value="50">Malaysia</coral-item>
+      </coral-select>
+    </quartz-layout>
+
+    <quartz-layout >
+      <label>From Date :</label>
+    <!-- <emerald-datetime-picker range duplex values="2022-10-01" (click)="onSelectFromDate()">  -->
+         <emerald-datetime-picker id="from-date" value="2022-10-01" (click)="onSelectFromDate()"> 
+        </emerald-datetime-picker>
+    </quartz-layout>
+
+    <quartz-layout > 
+        <label>To Date :</label>
+        <emerald-datetime-picker id="to-date" value="2022-10-30" max="2022-10-30" (click)="onSelectToDate()">
+        </emerald-datetime-picker>
+    </quartz-layout>
+    
+    <quartz-layout>
+      <label>Select N :</label><br>
+      <!-- Due to onSubmit chart gets prepared here  -->
+      <coral-select id="selectN" (click)="onSubmit()">  
+      <coral-item value=1 selected>1</coral-item>
       <coral-item value=2>2</coral-item>
       <coral-item value=3>3</coral-item>
       <coral-item value=4>4</coral-item>
       <coral-item value=5>5</coral-item>
       <coral-item value=6>6</coral-item>
       </coral-select>
-
-    </quartz-layout>
-     <quartz-layout >
-      <label>Date Range:</label>
-      <!-- <emerald-datetime-picker range duplex values="2022-10-01" (click)="onSelectFromDate()"> -->
-      <emerald-datetime-picker id="from-date" (click)="onSelectFromDate()">
-      </emerald-datetime-picker>
-    </quartz-layout>
-
-       <quartz-layout > 
-        <label>Date Range:</label>
-        <emerald-datetime-picker id="to-date" (click)="onSelectToDate()">
-        </emerald-datetime-picker>
       </quartz-layout>
 
-      <!-- <quartz-layout>
-          <emerald-datetime-picker range duplex values="2019-01-01,2019-01-07"></emerald-datetime-picker>
-      </quartz-layout> Check on Monday   --> // 
 
-      <quartz-layout>Universe
-        <coral-select id="selectfrequency" placeholder="Select the Universe">
-          <coral-item value="10">Singapore</coral-item>
-          <coral-item value="20">HongKong</coral-item>
-          <coral-item value="30">Thailand</coral-item>
-          <coral-item value="40">Australia</coral-item>
-          <coral-item value="50">Malaysia</coral-item>
+      <quartz-layout>
+        <label>Select Signal :</label><br>
+        <coral-select id="selectSignal" >  
+        <coral-item value=1 selected>0.239394</coral-item>
+        <coral-item value=2>0.626713</coral-item>
+        <coral-item value=3>1.138401</coral-item>
+        <coral-item value=4>2.504409</coral-item>
+        <coral-item value=5>0.319142</coral-item>
+        <coral-item value=6>1.445547</coral-item>
         </coral-select>
-      </quartz-layout>
+        </quartz-layout>
+    
 
-      <quartz-layout>Generate Report
-        <coral-button toggles class="large" (click)="onSubmit()">Submit</coral-button>
-        
+    <!-- <quartz-layout>
+          <emerald-datetime-picker range duplex values="2019-01-01,2019-01-07"></emerald-datetime-picker>
+    </quartz-layout>  --> 
+
+      
+     <quartz-layout>Generate Report <br>
+      <coral-button toggles class="large" (click)="onSubmit()">Submit</coral-button>
       </quartz-layout>
     </coral-panel>
   
@@ -65,12 +81,13 @@
     <coral-panel spacing slot="main-content">
     <!-- <div *ngIf="multiple_chart"> -->
      <div> 
-        <p>Coral Sapphire Interactive Multiple chart</p>
+        <p>Multiple chart</p>
         <sapphire-interactive-chart id="multiple"></sapphire-interactive-chart>
     </div>
-    
     </coral-panel>
+
     <coral-panel spacing slot="main-content">
+     <p>Observations  below</p> 
     <emerald-grid id="grid"></emerald-grid>
     </coral-panel>
     
