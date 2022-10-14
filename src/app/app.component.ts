@@ -52,8 +52,16 @@ loading: boolean = false;
 title = 'backtestingUI';
 Users: any = sampleData;
 
+portfolios : any;
+performance : any;
+dateFormat : any;
+decimalPlace :any;
+metrics:any;
+
 fromDate : any;
 toDate : any;
+startDate1 : any;
+endDate1 : any;
 json_Data : any = [];
 display_Data :any = [];
 data : any = [];
@@ -62,10 +70,11 @@ constructor(){}
   
 ngOnInit(): void {  
     this.uploadJsonDatatoArray();
-    this.renderResultGrid("Hello");            
-  this.initializeDemo();
-  }                    // end of ngOnInit   
-
+     
+    //this.generateTable();     
+    this.initializeDemo();
+    this.renderResultGrid("Hello");
+  }                    
 
   uploadJsonDatatoArray(): void {
     for(var i=0;i< 6;i++) {
@@ -80,22 +89,30 @@ ngOnInit(): void {
     this.initializeLayoutEvent();
   }
 
+
   onSubmit() : void {    
-    //console.log("submit button has been clicked");
-    
-    // 1) validate the date
+    console.log("submit button has been clicked");
+    // 1)Validate the User Input Date 
     var isProperDates :boolean = this.validateDate(this.fromDate,this.toDate);
+    //console.log("Proper Dates =" + this.fromDate);
+    //console.log("Proper Dates =" + this.toDate);
     //console.log("Proper Dates =" +isProperDates);
     
-    // 2)call the validatedate and retrive the date range 
+    // 2)Retrive the date range 
     if(isProperDates==true){
       this.calculateDateRangeForGraph(this.fromDate,this.toDate);
     }
 
-    // 3)Graph generation will take place here
-
-    
-
+    // 3)Chart generation code
+    var n : any = document.getElementById("selectN") as any;
+    //console.log(n.value);
+    for(var i=0;i< n.value ;i++) {
+      //console.log(this.getTime(i));
+      //console.log(this.getValue(i));
+      this.display_Data.push({ time: this.getTime(i),value : this.getValue(i)});
+    }
+      setTimeout(()=> this.displayMultipleChart(this.fromDate,this.toDate),1000);
+      this.readJsonFile();  
   }
 
   initializeLayoutEvent(): void {
@@ -106,19 +123,6 @@ ngOnInit(): void {
       toggleBtn.setAttribute('icon', layout.collapsed ? 'leftpanel-closed' : 'leftpanel-open');
     });
   }
-
-onSelect(){
-    var n : any =document.getElementById("selectN") as any;
-    //console.log(n.value);
-
-    for(var i=0;i< n.value ;i++) {
-      //console.log(this.getTime(i));
-      //console.log(this.getValue(i));
-      this.display_Data.push({ time: this.getTime(i),value : this.getValue(i)});
-    }
-      setTimeout(()=> this.displayMultipleChart(),1000);
-}
-   
     
   getTime( j: number): any {
     var time = (this.Users[j]["time"]);
@@ -147,7 +151,7 @@ onSelect(){
     const endDate = new Date(toDate);
     var flag : boolean = false;
     if(startDate > endDate){
-      console.log("startDate date > end Date");
+      alert("startDate date > end Date");
     }
     else if(startDate < endDate){ 
       //console.log("startDate date < end Date");
@@ -162,28 +166,26 @@ onSelect(){
 
 
   calculateDateRangeForGraph(fromDate : string, toDate : string) : any{
-    console.log("Inside calculateDateRangeForGraph");
-    //console.log(fromDate);
-    //console.log(toDate);
-    console.log(this.json_Data.length);
+    //console.log("Inside calculateDateRangeForGraph");
+    //console.log("fromDate" +fromDate);
+    //console.log("toDate" +toDate);
+    //console.log(this.json_Data.length);
 
     for(var i=0;i< this.json_Data.length ;i++){
       var temp : any = this.json_Data[i].time;
-
       if(temp >= fromDate && temp <= toDate){
-        console.log("temp date="+temp);
+        //console.log("temp date="+temp);
         //console.log("fromDate ="+fromDate);
         //console.log("toDate="+ toDate);
         this.display_Data.push(temp);
       }
-      console.log("Display data length= " + this.display_Data.length);
+      //console.log("Display data length= " + this.display_Data.length);
     }
     return this.display_Data;
   }
 
 
-
-    renderResultGrid(instrument : string) {
+  renderResultGrid(instrument : string) {
       //alert("renderResultGrid");
       
       var fields = ['intCol', 'strCol', 'floatCol'];
@@ -198,60 +200,125 @@ onSelect(){
       { title: 'Valid Observations', field: fields[2] },
       { title: 'Start Date', field: fields[3] },
       { title: 'End Date', field: fields[4] },
-      { title: 'Frequency', field: fields[2] },
-      { title: 'Cumulative Return', field: fields[2] },
-      { title: 'CAGR', field: fields[2] },
-      { title: 'Annualized Volatility', field: fields[2] },
-      { title: 'Information Ratio', field: fields[2] },
-      { title: 't-stat', field: fields[2] },
-      { title: 'Skewness', field: fields[2] },
-      { title: 'Kurtosis', field: fields[2] },
-      { title: 'Hit Ratio', field: fields[2] },
-      { title: 'Maximum Drawdown', field: fields[2] },
+      { title: 'Frequency', field: fields[5], width: 60, },
+      { title: 'Cumulative Return', field: fields[6] },
+      { title: 'CAGR', field: fields[7] },
+      { title: 'Annualized Volatility', field: fields[8] },
+      { title: 'Information Ratio', field: fields[9] },
+      { title: 't-stat', field: fields[10] },
+      { title: 'Skewness', field: fields[11] },
+      { title: 'Kurtosis', field: fields[12] },
+      { title: 'Hit Ratio', field: fields[13] },
+      { title: 'Maximum Drawdown', field: fields[14] },
 
     ],
     dataModel: { 
     fields: fields,
     data: [
-      [1, 'Singapore', 5.50],
-      [2, 'HongKong', 7.00],
-      [3, 'Venice', 25.00],
-      [4, 'Sri Lanka', 20.00],
-      [5, 'Malaysia', 5.75]
+      [1, 'Singapore', 5.50, 111 ],
+      [2, 'HongKong', 7.00, 10],
+      [3, 'Venice', 25.00, 100],
+      [4, 'Sri Lanka', 20.00, 222],
+      [5, 'Malaysia', 5.75, 333]
     ]
+     } };
+}
+
+
+generateChart(from: string, to: string) {            
+  let initVal = 20;
+  const startDate = new Date(from);
+  const endDate = new Date(to);
+  //console.log("startDate generateChart=="+ startDate);
+  //console.log("endDate generateChart=="+ endDate);
+  const ret = [];
+  const total = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+  for (let i = 0; i < total; i++) {
+      const volatility = (Math.random() * (4.5) - 2) / 100; // random % volatility
+      const date = new Date(startDate.setDate(startDate.getDate() + 1));
+      const val = initVal + initVal * volatility;
+      initVal = val;
+      const point = {
+          time: date.getTime() / 1000.0,
+          value: parseFloat(val.toFixed(2))
+      };
+      ret.push(point);
   }
-};
-  }
+  return ret;
+}
 
      
-displayMultipleChart(): void {
-    const multiplechart = document.getElementById("multiple") as any;
+displayMultipleChart(fromDate1 : string, toDate1 : string): any {
+     const startDate1 = new Date(fromDate1);
+     const endDate1 = new Date(toDate1);
+     //console.log("const startDate"+ startDate1);
+     //console.log("endDate"+ endDate1);
+     var startDt :string = startDate1.toString();
+     var endDt :string = endDate1.toString();
+     var multiplechart : any = document.getElementById("multiple") as any;
+     var selectN : any = document.getElementById("selectN") as any;
+     console.log("Multiple Chart value of selectN " + selectN.value);
+
     multiplechart.config = {
       options: {
         priceScale: {
           mode: 2
-        }
+        },
       },  
       series: [
         {
           symbol: 'GOOGL.O',
           type: 'line',
-          data : this.display_Data
+          //data : this.display_Data
+          //data : this.generateChart('2020-09-08', '2022-09-10')
+          data : this.generateChart(startDt, endDt)
         },
         {
           symbol: 'AMZN.OQ',
           type: 'line',
-          data : this.display_Data
+          data: this.generateChart(startDt, endDt)
         },
         {
           symbol: 'WALMART.OQ',
           type: 'line',
-          data : this.display_Data
+          data: this.generateChart(startDt, endDt)
+        },
+        {
+          symbol: 'DISNEY.OQ',
+          type: 'line',
+          data: this.generateChart(startDt, endDt)
         }
       ]
     }
   }
 
+  // which takes n as input 
+
+  sizeofLoop(sizeN : number ){
+    // Data of series will come here and ietrate as per value of n 
+
+
+
+
+
+
+  }
+
+
+
+
+   readJsonFile() :  any{
+    console.log("Inside readJson method :");
+    this.loading = true;
+    return fetch(`assets/performance.json`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.loading = false;
+        console.log("Json data :"+ data.time);
+        console.log("Json data :"+ data.phone);
+        console.log("Json data :"+ data.size);
+        return data;
+      });
+  }
+
 }
-
-
