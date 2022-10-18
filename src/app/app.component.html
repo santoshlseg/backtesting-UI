@@ -8,37 +8,29 @@
   </nav>
 </header>
 
-
   <carbon-sidebar-layout id="layout" sidebar-width="350px">
     <coral-header slot="sidebar-header" level="1">Title</coral-header>
     <coral-panel slot="sidebar-content"> <br>
     <quartz-layout>
-      <label>Universe</label><br>
-      <coral-select id="selectUniverse" >
-        <coral-item value="10" selected>Singapore</coral-item>
-        <coral-item value="20">HongKong</coral-item>
-        <coral-item value="30">Thailand</coral-item>
-        <coral-item value="40">Australia</coral-item>
-        <coral-item value="50">Malaysia</coral-item>
-      </coral-select>
+      <label> Universe :</label><br>
+      <coral-select id="selectUniverseComboBox"></coral-select>
     </quartz-layout>
 
     <quartz-layout >
-      <label>From Date :</label>
+      <label> From Date :</label>
     <!-- <emerald-datetime-picker range duplex values="2022-10-01" (click)="onSelectFromDate()">  -->
          <emerald-datetime-picker id="from-date" value="2022-10-01" (click)="onSelectFromDate()"> 
         </emerald-datetime-picker>
     </quartz-layout>
 
     <quartz-layout > 
-        <label>To Date :</label>
-        <emerald-datetime-picker id="to-date" value="2022-10-30" max="2022-10-30" (click)="onSelectToDate()">
+        <label> To Date :</label>
+        <emerald-datetime-picker id="to-date" value="2022-10-30" max="2022-11-30" (click)="onSelectToDate()">
         </emerald-datetime-picker>
     </quartz-layout>
     
     <quartz-layout>
       <label>Select N :</label><br>
-      <!-- Due to onSubmit chart gets prepared here  -->
       <coral-select id="selectN" (click)="onSubmit()">  
       <coral-item value=1 selected>1</coral-item>
       <coral-item value=2>2</coral-item>
@@ -47,49 +39,56 @@
       <coral-item value=5>5</coral-item>
       <coral-item value=6>6</coral-item>
       </coral-select>
-      </quartz-layout>
+    </quartz-layout>
 
 
       <quartz-layout>
         <label>Select Signal :</label><br>
-        <coral-select id="selectSignal" >  
-        <coral-item value=1 selected>0.239394</coral-item>
-        <coral-item value=2>0.626713</coral-item>
-        <coral-item value=3>1.138401</coral-item>
-        <coral-item value=4>2.504409</coral-item>
-        <coral-item value=5>0.319142</coral-item>
-        <coral-item value=6>1.445547</coral-item>
+        <coral-select id="selectSignal" (click)="onSelectSignal"> 
+        <coral-item selected value=0.239394>0.239394</coral-item>
+        <coral-item value=0.626713>0.626713</coral-item>
+        <coral-item value=1.138401>1.138401</coral-item>
+        <coral-item value=2.504409>2.504409</coral-item>
+        <coral-item value=0.319142>0.319142</coral-item>
+        <coral-item value=1.445547>1.445547</coral-item>
         </coral-select>
-        </quartz-layout>
-    
-
-    <!-- <quartz-layout>
-          <emerald-datetime-picker range duplex values="2019-01-01,2019-01-07"></emerald-datetime-picker>
-    </quartz-layout>  --> 
-
-      
-     <quartz-layout>Generate Report <br>
-      <coral-button toggles class="large" (click)="onSubmit()">Submit</coral-button>
       </quartz-layout>
-    </coral-panel>
-  
+
+      <quartz-layout>
+        <label>Select BenchMark :</label><br>
+        <coral-select id="benchMark" >  
+        <coral-item selected value=1.00>1.00</coral-item>
+        </coral-select>
+      </quartz-layout> 
+
+      <quartz-layout>
+        <label>Long/Short Spread :</label><br>
+        <coral-select id="spread" >  
+        <coral-item value=100>100</coral-item>
+        <coral-item value=200>200</coral-item>
+        <coral-item value=300>300</coral-item>
+        </coral-select>
+      </quartz-layout> 
+    
+    <quartz-layout>Generate Report <br>
+      <coral-button toggles id="submitBtn" class="large" (click)="onSubmit()">Submit</coral-button>
+      </quartz-layout>
+     </coral-panel>
 
     <coral-header slot="main-header" level="1">
       <coral-button transparent slot="left" id="toggleBtn" icon="leftpanel-open"></coral-button>
       <coral-button slot="right" transparent icon="settings"></coral-button>
     </coral-header>
     <coral-panel spacing slot="main-content">
-    <!-- <div *ngIf="multiple_chart"> -->
-     <div> 
         <p>Multiple chart</p>
         <sapphire-interactive-chart id="multiple"></sapphire-interactive-chart>
-    </div>
-    </coral-panel>
-
-    <coral-panel spacing slot="main-content">
-     <p>Observations  below</p> 
+    <!-- </coral-panel>
+    <coral-panel spacing slot="main-content"> -->
+      <p>Key Performance Metrices : </p> 
+     <emerald-grid id="grid1"></emerald-grid>
+     
+     <p>Observations  below:</p> 
     <emerald-grid id="grid"></emerald-grid>
     </coral-panel>
-    
   </carbon-sidebar-layout>
 
