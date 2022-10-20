@@ -1,17 +1,11 @@
-h2{
-    text-align: center;
-    text-size-adjust: 50px;
-    text-decoration-color: coral;
-}
 
 header {
-    height: 50px;
+    height: 100px;
     background-color: #fff;
 }
 
 nav.main {
     background-color:white;
-    /*border-bottom:  1px solid #eee;*/
 }
 
 nav.main ul {
@@ -72,7 +66,6 @@ a.logo span {
     width: 198px;
     height: 78px;
 }
-
 label{
     text-align: center;
 }
@@ -81,31 +74,25 @@ label{
     height: 500px;
     line-height: normal;
   }
-
 p{
     font-size: 18px;
     padding: 30px 10px 0px 0px;
 }
-
 coral-select {
-    width: 60%;
+    width: 75%;
 }
-
 coral-item {
     text-align: left; 
 }
-
 coral-number-field.value-input {
     width: 60px;
 }
-
-
 body{
     padding-bottom: 200px;
 }
 
 #logo{
-    width: 40px;
+    width: 60px;
     margin-right: 20px;
 }
 
@@ -148,6 +135,11 @@ sapphire-interactive-chart {
 }
 
 emerald-grid {
-    height: 150px;
+    height: 600px;
+  }
+
+  .item {
+    position: relative;
+    height: 50px;
   }
 
