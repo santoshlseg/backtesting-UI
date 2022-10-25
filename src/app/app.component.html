@@ -39,32 +39,39 @@
       <coral-item value=4>4</coral-item>
       <coral-item value=5>5</coral-item>
       <coral-item value=6>6</coral-item>
+      <coral-item value=7>7</coral-item>
       </coral-select>
     </quartz-layout>
 
     <quartz-layout>
         <label>Select Signal :</label><br>
         <coral-select id="selectSignal" (click)="onSelectSignal">
-        <coral-item selected value=0.239394>0.239394</coral-item>
-        <coral-item value=0.626713>0.626713</coral-item>
-        <coral-item value=1.138401>1.138401</coral-item>
-        <coral-item value=2.504409>2.504409</coral-item>
-        <coral-item value=0.319142>0.319142</coral-item>
-        <coral-item value=1.445547>1.445547</coral-item>
+        <coral-item value="PMST">PMST</coral-item>
+        <coral-item value="PMMT">PMMT</coral-item>
+        <coral-item value="PMLT">PMLT</coral-item>
+        <coral-item value="ARMG">ARMG</coral-item>
         </coral-select>
       </quartz-layout>
 
       <quartz-layout>
         <label>Select BenchMark :</label><br>
-        <coral-toggle label="OFF" checked-label="ON"></coral-toggle>
+        <coral-select id="selectBenchMark">
+          <coral-item value="None">None</coral-item>
+          <coral-item value="Equal Weight">EQWT</coral-item>
+          <coral-item value="Strait Times Index - STI">Singapore</coral-item>
+          <coral-item value="China Securities Index - CSI300">China</coral-item>
+          <coral-item value="Sensex">India</coral-item>
+          <coral-item value="FTSE 100">Britain</coral-item>
+          <coral-item value="S&P 500">US</coral-item>
+        </coral-select>  
       </quartz-layout> 
 
       <quartz-layout>
         <label >Long/Short Spread :</label><br>
         <coral-select id="spread" >  
-        <coral-item value=100>100</coral-item>
-        <coral-item value=200>200</coral-item>
-        <coral-item value=300>300</coral-item>
+        <coral-item value=true>True</coral-item>
+        <coral-item value=false>False</coral-item>
+        <!-- <coral-item value=300>300</coral-item> -->
         </coral-select>
       </quartz-layout> 
     
