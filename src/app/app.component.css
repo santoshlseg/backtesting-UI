@@ -91,6 +91,8 @@ body{
     padding-bottom: 200px;
 }
 
+
+
 #logo{
     width: 60px;
     margin-right: 20px;
@@ -123,7 +125,7 @@ sapphire-interactive-chart {
     padding: 0 3px;
   }
 
-  quartz-layout {
+quartz-layout {
     margin-bottom :20px;
   }
 
@@ -135,10 +137,10 @@ sapphire-interactive-chart {
 }
 
 emerald-grid {
-    height: 600px;
+    height: 500px;
   }
 
-  .item {
+.item {
     position: relative;
     height: 50px;
   }
