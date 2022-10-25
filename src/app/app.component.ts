@@ -59,8 +59,7 @@ universe: Array<any> = [
   { label: 'Singapore', value: 'SG' },
   { label: 'China', value: 'CN' },
   { label: 'Hong Kong', value: 'HK' },
-  { label: 'Taiwan', value: 'TW' },
-  { label: 'Thailand', value: 'TH' , selected: true},
+  { label: 'Britain', value: 'TH' , selected: true},
   { label: 'Canada', value: 'CA' },
   { label: 'India', value: 'IN' },
   { label: 'United States', value: 'US' }
@@ -194,14 +193,14 @@ ngOnInit(): void {
     var temp_todate=document.getElementById("to-date") as any;
     this.toDate=temp_todate.value;
     var signal = document.getElementById('selectSignal') as any;
-    //var benchMark = document.getElementById('benchMark') as any;
+    var benchMark = document.getElementById('selectBenchMark') as any;
     var spread = document.getElementById('spread') as any;
 
     const performanceGrid = [
       ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate
       ,this.fromDate],
       ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
-      ["Signal",signal.value,signal.value,signal.value,signal.value,signal.value,spread.value,999],
+      // ["Signal",signal.value,signal.value,signal.value,signal.value,signal.value,spread.value,benchMark.value],
       ["Total Number of Observations","148","148","148","148","148","148","148"],
       ["Valid Observations","147","147","147","147","147","147","147"],
       ["Cumulative Returns", "0.019","0.037","0.084","0.028","0.035","0.012","0.021"],
@@ -231,7 +230,7 @@ ngOnInit(): void {
     { title: 'Q4', field: fields[4] },
     { title: 'Q5', field: fields[5] },
     { title: 'Long/Short Spread', field: fields[6]},
-    { title: 'CSI300', field: fields[7] },
+    { title: 'BenchMark', field: fields[7] },
   ],
   dataModel: { 
   fields: fields,
@@ -266,7 +265,22 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
         symbol: 'Q4',
         type: 'line',
         data: this.generateChart()
-      }
+      },
+      {
+        symbol: 'Q5',
+        type: 'line',
+        data: this.generateChart()
+      },
+      {
+        symbol: 'Long/Short Spread',
+        type: 'line',
+        data: this.generateChart()
+      },
+      {
+        symbol: 'BenchMark',
+        type: 'line',
+        data: this.generateChart()
+      },
     ];
     this.start_Date = startDate1;
     this.end_Date = endDate1;
