@@ -42,23 +42,24 @@
 
     <quartz-layout>
         <label>Select Signal :</label><br>
-        <coral-select id="selectSignal" (click)="onSelectSignal">
-        <coral-item value="PMST">PMST</coral-item>
-        <coral-item value="PMMT">PMMT</coral-item>
-        <coral-item value="PMLT">PMLT</coral-item>
-        <coral-item value="ARMG">ARMG</coral-item>
+        <coral-select id="selectSignal">
+        <coral-item value="PMST">StarMine Price Momentum Short Term</coral-item>
+        <coral-item value="PMMT">StarMine Price Momentum Medium Term</coral-item>
+        <coral-item value="PMLT">StarMine Price Momentum Long Term</coral-item>
+        <coral-item value="ARMG">StarMine Analyst Revision Global</coral-item>
         </coral-select>
       </quartz-layout>
 
       <quartz-layout>
         <label>Select BenchMark :</label><br>
         <coral-select id="selectBenchMark">
-          <coral-item value="Strait Times Index - STI">Singapore</coral-item>
-          <coral-item value="China Securities Index - CSI300">China</coral-item>
-          <coral-item value="FTSE 100">Britain</coral-item>
-          <coral-item value="S&P 500">US</coral-item>
-          <coral-item value="Sensex">India</coral-item>
-          <coral-item value="">None</coral-item>
+          <coral-item value=".STI">Strait Times Index</coral-item>
+          <coral-item value=".CSI300">China Securities Index</coral-item>
+          <coral-item value=".FTSE">FTSE 100</coral-item>
+          <coral-item value=".SPX">S&P 500</coral-item>
+          <coral-item value=".BSESN">Sensex</coral-item>
+          <coral-item value=".GSPTSE">S&P/TSX</coral-item>
+          <coral-item value=null>None</coral-item>
           <coral-item value="Equal Weight">EQWT</coral-item>
         </coral-select>  
       </quartz-layout> 
@@ -66,8 +67,8 @@
       <quartz-layout>
         <label >Long/Short Spread :</label><br>
         <coral-select id="spread" >  
-        <coral-item value="True">True</coral-item>
-        <coral-item value="False">False</coral-item>
+        <coral-item value=true>True</coral-item>
+        <coral-item value=false>False</coral-item>
         </coral-select>
       </quartz-layout> 
     
