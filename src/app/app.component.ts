@@ -52,13 +52,12 @@ import { ParseFlags } from '@angular/compiler';
 })
 
 export class AppComponent {
-//loading: boolean = false;
+loading: boolean = false;
 title = 'backtestingUI';
 
 universe: Array<any> = [
   { label: 'Singapore', value: 'SG' },
   { label: 'China', value: 'CN' },
-  { label: 'Hong Kong', value: 'HK' },
   { label: 'Britain', value: 'TH' , selected: true},
   { label: 'Canada', value: 'CA' },
   { label: 'India', value: 'IN' },
@@ -70,7 +69,6 @@ gridData1: Array<any> = [];
 portfolios : any;
 performance : any;
 dateFormat : any;
-decimalPlace :any;
 metrics:any;
 
 fromDate : any ; 
@@ -110,7 +108,7 @@ series_Data : any = [
 constructor(){}
   
 ngOnInit(): void {  
-  //this.loading = false;
+    this.loading = true;
     this.onSubmit();
     this.initializeUniverseComboBox();           
     this.initializeLayoutEvent();
@@ -185,36 +183,35 @@ ngOnInit(): void {
   }
 
   renderPerformanceGrid() {
-    var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','floatCol',
-    'strCol7','strCol8'];
+    this.loading = true;
+    //var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','floatCol','strCol7','strCol8'];
+    var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','strCol7','strCol8','strCol9'];
     var grid = document.getElementById('grid1') as any;
     var temp_fromdate =document.getElementById("from-date") as any;
     this.fromDate=temp_fromdate.value;
     var temp_todate=document.getElementById("to-date") as any;
     this.toDate=temp_todate.value;
-    var signal = document.getElementById('selectSignal') as any;
+    //var signal = document.getElementById('selectSignal') as any;
     var benchMark = document.getElementById('selectBenchMark') as any;
     var spread = document.getElementById('spread') as any;
 
     const performanceGrid = [
-      ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate
-      ,this.fromDate],
+      ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
       ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
-      // ["Signal",signal.value,signal.value,signal.value,signal.value,signal.value,spread.value,benchMark.value],
-      ["Total Number of Observations","148","148","148","148","148","148","148"],
-      ["Valid Observations","147","147","147","147","147","147","147"],
-      ["Cumulative Returns", "0.019","0.037","0.084","0.028","0.035","0.012","0.021"],
-      ["CAGR","0.002","0.003","0.007","0.002","0.003","0.001","0.009"],
-      ["Annualized Volatility","0.013","0.015","0.012","0.013","0.015","0.012","0.013"],
-      ["Information Ratio","0.118","0.204","0.553","0.118","0.204","0.553","0.118"],
-      ["t-stat","0.118","0.204","0.553","0.118","0.204","0.553","0.118"],
-      ["Skewness","0.118","0.204","0.553","0.225","0.204","0.553","0.118"],
-      ["Kurtosis","0.555","0.286","-0.047","1.556","0.411","0.437","-0.148"],
-      ["Hit Ratio","0.517","0.469","0.551","0.524","0.49","0.524","0.51"],
-      // [Maximum Drawdown],
-      // [Value-at-Risk 95%],
-      // [Expected Shortfall 95],
-      // [Turnover]
+      ["Total Number of Observations","148","148","148","148","148",spread.value,benchMark.value],
+      ["Valid Observations","147","147","147","147","147",spread.value,benchMark.value],
+      ["Cumulative Returns", "0.019","0.037","0.084","0.028","0.035",spread.value,benchMark.value],
+      ["CAGR","0.002","0.003","0.007","0.002","0.003",spread.value,benchMark.value],
+      ["Annualized Volatility","0.013","0.015","0.012","0.013","0.015",spread.value,benchMark.value],
+      ["Information Ratio","0.118","0.204","0.553","0.118","0.204",spread.value,benchMark.value],
+      ["t-stat","0.118","0.204","0.553","0.118","0.204",spread.value,benchMark.value],
+      ["Skewness","0.118","0.204","0.553","0.225","0.204",spread.value,benchMark.value],
+      ["Kurtosis","0.555","0.286","-0.047","1.556","0.411",spread.value,benchMark.value],
+      ["Hit Ratio","0.517","0.469","0.551","0.524","0.49",spread.value,benchMark.value],
+      ["Maximum Drawdown", "-0.032","-0.037","-0.038","-0.03","-0.029",spread.value,benchMark.value],
+      ["Value-at-Risk"," 95%"," -0.01","-0.012","	-0.01","-0.014",spread.value,benchMark.value],
+      ["Expected Shortfall", "95"," -0.01","-0.012","-0.01","-0.014",spread.value,benchMark.value],
+      ["Turnover","1.6","1.6","1.6","1.6","1.6",spread.value,benchMark.value]
       ] as any;
 
     grid.config = {
@@ -297,7 +294,8 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
   }
    
-  generateChart() {            
+  generateChart() {    
+    this.loading = true;        
     let initVal = 20;
      const startDate = new Date(this.start_Date);
      const endDate = new Date(this.end_Date);
