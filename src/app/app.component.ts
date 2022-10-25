@@ -44,6 +44,7 @@ import '@elf/sapphire-bar/themes/halo/light';
 import '@elf/sapphire-interactive-chart/themes/halo/light';
 import { formatDate, Time } from '@angular/common';
 import { ParseFlags } from '@angular/compiler';
+import { AUTO_STYLE } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -194,6 +195,8 @@ ngOnInit(): void {
     //var signal = document.getElementById('selectSignal') as any;
     var benchMark = document.getElementById('selectBenchMark') as any;
     var spread = document.getElementById('spread') as any;
+    var flag : boolean = spread.value;
+    console.log("spread= "+spread.value);
 
     const performanceGrid = [
       ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
@@ -220,14 +223,15 @@ ngOnInit(): void {
     sortableColumns: true
     },
     columns: [
-    { title: 'Metric', field: fields[0] , width: 300},
-    { title: 'Q1', field: fields[1] },
+    { title: 'Metric', field: fields[0] , width: 250},
+    { title: 'Q1', field: fields[1], width : 100 },
     { title: 'Q2', field: fields[2] },
     { title: 'Q3', field: fields[3] },
     { title: 'Q4', field: fields[4] },
-    { title: 'Q5', field: fields[5] },
-    { title: 'Long/Short Spread', field: fields[6]},
-    { title: 'BenchMark', field: fields[7] },
+    { title: 'Q5', field: fields[5] , visible :true},
+    // <input [attr.disabled]="disabled ? '' : null"/>
+    { title: 'Long/Short Spread', field: fields[6], visible : [spread.value]="true ? 'true' : 'false'"},
+    { title: 'BenchMark', field: fields[7] , visible : flag },
   ],
   dataModel: { 
   fields: fields,
