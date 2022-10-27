@@ -63,11 +63,8 @@ universe: Array<any> = [
   { label: 'United States', value: 'US' }
 ];
 
-
-//portfolios : any;
 performance : any;
 dateFormat : any;
-//metrics:any;
 
 fromDate : any ; 
 toDate : any;
@@ -78,6 +75,9 @@ json_Data1 : any = [];
 data : any = [];
 columnArray : Array<any> = [];
 observationArray : any =[];
+validObservations : any =[];
+cumulativeReturns : any = [];
+CAGR : any = [];
 
 start_Date :any = '2022-01-01';          
 end_Date : any = '2022-12-31';
@@ -182,32 +182,59 @@ ngOnInit(): void {
     var userFractileSelected = userFractileSelected+3;
     //console.log("userFractileSelected="+ userFractileSelected);
 
-    // this.observationArray=[];
-     for(var i=0;i< userFractileSelected-2 ;i++){
-       this.observationArray[i].push(148);      // Make other array also here 
-     }
+     this.observationArray=[];
+     this.validObservations=[];
+     this.cumulativeReturns=[];
+     this.CAGR = [];
 
+     for(var i=0;i<= userFractileSelected ;i++){
+      if(i==0){
+      this.observationArray.push("Total Observations");
+      this.validObservations.push("Valid Observations");
+      this.cumulativeReturns.push("Cumulative Returns");
+      this.CAGR.push("C A G R");
+      }
+      else if(i==userFractileSelected-2){               
+        this.observationArray.push(spread.value);
+        this.validObservations.push(spread.value)
+        this.cumulativeReturns.push(spread.value);
+        this.CAGR.push(spread.value);
+      }
+      else if(i==userFractileSelected-1){               
+        this.observationArray.push(benchMark.value);
+        this.validObservations.push(benchMark.value);
+        this.cumulativeReturns.push(benchMark.value);
+        this.CAGR.push(benchMark.value);
+      }
+      else{
+        this.observationArray.push("148"); 
+        this.validObservations.push("111");
+        this.cumulativeReturns.push("605");
+        this.CAGR.push("128");
+      }
+    }
+     
+    
     const performanceGrid = [
       ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,
                     this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
       ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,
-                  this.toDate,this.toDate,,this.toDate,this.toDate],
-     ["Total Observations","147","147","147","147","147",
-                  spread.value,benchMark.value],
-      ["Valid Observations","147","147","147","147","147",
-                  spread.value,benchMark.value],
-      ["Cumulative Returns","0.019","0.037","0.84","0.028","0.03","0.524","147","147",spread.value,benchMark.value],
-      ["CAGR","0.002","0.003","0.007","0.002","0.003","0.524","147","147",spread.value,benchMark.value],
-      ["Annualized Volatility","0.013","0.015","0.012","0.013","0.015","0.524",spread.value,benchMark.value],
-      ["Information Ratio","0.118","0.204","0.553","0.118","0.204","0.524",spread.value,benchMark.value],
-      ["t-stat","0.118","0.204","0.553","0.118","0.204","0.524",spread.value,benchMark.value],
-      ["Skewness","0.118","0.204","0.553","0.225","0.204","0.524",spread.value,benchMark.value],
-      ["Kurtosis","0.555","0.286","-0.047","1.556","0.411","0.524",spread.value,benchMark.value],
-      ["Hit Ratio","0.517","0.469","0.551","0.524","0.49","0.524",spread.value,benchMark.value],
-      ["Maximum Drawdown", "-0.032","-0.037","-0.038","-0.03","-0.029","0.524",spread.value,benchMark.value],
-      ["Value-at-Risk"," 95%","-0.01","-0.012","-0.01","-0.014","0.524",spread.value,benchMark.value],
-      ["Expected Shortfall", "95","-0.01","-0.012","-0.01","-0.014","-0.015",spread.value,benchMark.value],
-      ["Turnover","1.6","1.3","1.6","1.6","1.7","1.8",spread.value,benchMark.value]
+                  this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
+
+      this.observationArray,     
+      this.validObservations,  
+      this.cumulativeReturns,
+      this.CAGR,
+      // ["Annualized Volatility","0.013","0.015","0.012","0.013","0.015","0.524",spread.value,benchMark.value],
+      // ["Information Ratio","0.118","0.204","0.553","0.118","0.204","0.524",spread.value,benchMark.value],
+      // ["t-stat","0.118","0.204","0.553","0.118","0.204","0.524",spread.value,benchMark.value],
+      // ["Skewness","0.118","0.204","0.553","0.225","0.204","0.524",spread.value,benchMark.value],
+      // ["Kurtosis","0.555","0.286","-0.047","1.556","0.411","0.524",spread.value,benchMark.value],
+      // ["Hit Ratio","0.517","0.469","0.551","0.524","0.49","0.524",spread.value,benchMark.value],
+      // ["Maximum Drawdown", "-0.032","-0.037","-0.038","-0.03","-0.029","0.524",spread.value,benchMark.value],
+      // ["Value-at-Risk"," 95%","-0.01","-0.012","-0.01","-0.014","0.524",spread.value,benchMark.value],
+      // ["Expected Shortfall", "95","-0.01","-0.012","-0.01","-0.014","-0.015",spread.value,benchMark.value],
+      // ["Turnover","1.6","1.3","1.6","1.6","1.7","1.8",spread.value,benchMark.value]
       ] as any;
 
 
@@ -323,9 +350,7 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
      var temp_series :any = [];
     this.start_Date = startDate1;
     this.end_Date = endDate1;
-    
-     for(var i= 0;i< selectFractile.value ;i++){
-      console.log("Inside Loop ");
+    for(var i= 0;i< selectFractile.value ;i++){
        temp_series.push({symbol :'Q'+(i-1).toString(),type: 'line',data: this.generateChart()});
      }
     multiplechart.config = {
