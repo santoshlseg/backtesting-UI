@@ -37,6 +37,10 @@
       <coral-item value=5>5</coral-item>
       <coral-item value=6>6</coral-item>
       <coral-item value=7>7</coral-item>
+      <coral-item value=8>8</coral-item>
+      <coral-item value=9>9</coral-item>
+      <coral-item value=10>10</coral-item>
+      <coral-item value=12>12</coral-item>
       </coral-select>
     </quartz-layout>
 
@@ -57,18 +61,19 @@
           <coral-item value=".CSI300">China Securities Index</coral-item>
           <coral-item value=".FTSE">FTSE 100</coral-item>
           <coral-item value=".SPX">S&P 500</coral-item>
-          <coral-item value=".BSESN">Sensex</coral-item>
+          <coral-item value=".BSESN" selected>Sensex</coral-item>
           <coral-item value=".GSPTSE">S&P/TSX</coral-item>
+    <!-- <coral-item value=null>None</coral-item>   -->
           <coral-item value=null>None</coral-item>
           <coral-item value="Equal Weight">EQWT</coral-item>
         </coral-select>  
       </quartz-layout> 
 
-      <quartz-layout>
-        <label >Long/Short Spread :</label><br>
+      <quartz-layout >
+        <label>Long/Short Spread :</label><br>
         <coral-select id="spread" >  
-        <coral-item value=true>True</coral-item>
-        <coral-item value=false>False</coral-item>
+        <coral-item value="True" selected>True</coral-item>
+        <coral-item value="False">False</coral-item>
         </coral-select>
       </quartz-layout> 
     
