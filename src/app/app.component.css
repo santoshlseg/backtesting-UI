@@ -79,7 +79,7 @@ p{
     padding: 30px 10px 0px 0px;
 }
 coral-select {
-    width: 75%;
+    width: 100%;
 }
 coral-item {
     text-align: left; 
@@ -126,7 +126,7 @@ sapphire-interactive-chart {
   }
 
 quartz-layout {
-    margin-bottom :20px;
+    margin-bottom :18px;
   }
 
 
