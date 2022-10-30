@@ -40,7 +40,7 @@
       <coral-item value=8>8</coral-item>
       <coral-item value=9>9</coral-item>
       <coral-item value=10>10</coral-item>
-      <coral-item value=12>12</coral-item>
+      <coral-item value=15>12</coral-item>
       </coral-select>
     </quartz-layout>
 
@@ -57,15 +57,14 @@
       <quartz-layout>
         <label>Select BenchMark :</label><br>
         <coral-select id="selectBenchMark">
+          <coral-item value=null>None</coral-item>
+          <coral-item value="Equal Weight">EQWT</coral-item>
           <coral-item value=".STI">Strait Times Index</coral-item>
           <coral-item value=".CSI300">China Securities Index</coral-item>
           <coral-item value=".FTSE">FTSE 100</coral-item>
           <coral-item value=".SPX">S&P 500</coral-item>
           <coral-item value=".BSESN" selected>Sensex</coral-item>
           <coral-item value=".GSPTSE">S&P/TSX</coral-item>
-    <!-- <coral-item value=null>None</coral-item>   -->
-          <coral-item value=null>None</coral-item>
-          <coral-item value="Equal Weight">EQWT</coral-item>
         </coral-select>  
       </quartz-layout> 
 
@@ -90,7 +89,7 @@
       <sapphire-interactive-chart id="multiple"></sapphire-interactive-chart>
       <p>Key Performance Metrices : </p> 
      <emerald-grid id="grid1"></emerald-grid>
-    <emerald-grid id="grid"></emerald-grid>
+     <!-- <emerald-grid id="grid"></emerald-grid> -->
     </coral-panel>
   </carbon-sidebar-layout>
 
