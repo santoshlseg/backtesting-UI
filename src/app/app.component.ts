@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import sampleData from '../assets/data.json';
 import performanceData from '../assets/performance.json';
 import priceData from '../assets/prices.json';
+import benchmark from '../assets/santosh.json';
 
 
 import '@elf/amber-loader';
@@ -43,7 +44,6 @@ import '@elf/quartz-layout/themes/halo/light';
 import '@elf/sapphire-bar/themes/halo/light';
 import '@elf/sapphire-interactive-chart/themes/halo/light';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -51,7 +51,6 @@ import '@elf/sapphire-interactive-chart/themes/halo/light';
 })
 
 export class AppComponent {
-loading: boolean = false;
 title = 'backtestingUI';
 
 universe: Array<any> = [
@@ -60,12 +59,34 @@ universe: Array<any> = [
   { label: 'Britain', value: 'TH' , selected: true},
   { label: 'Canada', value: 'CA' },
   { label: 'India', value: 'IN' },
-  { label: 'United States', value: 'US' }
+  { label: 'United States', value: 'US'}
+];
+
+signal: Array<any> = [
+  { label: 'StarMine Price Momentum Short Term', value: 'PMST' },
+  { label: 'StarMine Price Momentum Medium Term', value: 'PMMT' },
+  { label: 'StarMine Price Momentum Long Term', value: 'PMLT' },
+  { label: 'StarMine Analyst Revision Global', value: 'ARMG' }
+];
+
+// benchMark : Array<any> = [
+//   { label: 'None', value: 'null' },
+//   { label: 'EQWT', value: 'Equal Weight' },
+//   { label: 'Strait Times Index', value: '.STI' },
+//   { label: 'China Securities Index', value: '.CSI300' },
+//   { label: 'FTSE 100', value: '.FTSE' },
+//   { label: 'S&P 500', value: '.FTSE' },
+//   { label: 'Sensex', value: '.BSESN' , selected: true},
+//   { label: 'S&P/TSX', value: '.GSPTSE' }
+// ];
+
+benchMarks : Array<any> = [
+  { label: 'EQWT', value: 'Equal Weight' }
 ];
 
 performance : any;
 dateFormat : any;
-
+loading : boolean= true;
 fromDate : any ; 
 toDate : any;
 startDate1 : any;
@@ -75,13 +96,17 @@ json_Data1 : any = [];
 data : any = [];
 columnNames : Array<any> = [];
 rowArray : Array<any> = [];
-rowArray1 : Array<any> = [];
+rowArrayFlag : Array<any> = [];
+rowArrayData : Array<any> = [];
 rowArray2 : Array<any> = [];
+rowArray3 : Array<any> = [];
+rowArray4 : Array<any> = [];
 observationArray : any =[];
 validObservations : any =[];
 cumulativeReturns : any = [];
 CAGR : any = [];
 annualizedVolatility : any =[];
+informationRatio : any=[];
 
 start_Date :any = '2022-01-01';          
 end_Date : any = '2022-12-31';
@@ -90,11 +115,14 @@ end_Date : any = '2022-12-31';
 constructor(){}
   
 ngOnInit(): void {  
-    this.loading = true;
+    this.loading = false;
     this.onSubmit();
-    this.initializeUniverseComboBox();           
+    this.initializeUniverseComboBox();   
+    this.initializeSignalComboBox();  
+    this.initializeBenchMarkComboBox(this.benchMarks);      
     this.initializeLayoutEvent();
     this.onSelectSignal();
+    this.retrieveBenchMarks();
   }                    
 
   initializeUniverseComboBox(): void {
@@ -104,13 +132,64 @@ ngOnInit(): void {
        this.universeComboBoxChanged(event);
      });
   }
-
   universeComboBoxChanged(event: any): void {
     this.universe = event.detail.value;
-    console.log("univserse" +this.universe);
   }
 
+  initializeSignalComboBox(): void {
+    const comboBox = document.getElementById('selectSignal') as any;
+    comboBox.data = this.signal;
+    comboBox.addEventListener('value-changed', (event: any) => {
+       this.signalComboBoxChanged(event);
+     });
+  }
+  signalComboBoxChanged(event: any): void {
+    this.signal = event.detail.value;
+    console.log("signal = " +this.signal);
+  }
+
+  // initializeBenchMarkComboBox(): void {
+  //   const comboBox = document.getElementById('selectBenchMark') as any;
+  //   comboBox.data = this.benchMark;
+  //   comboBox.addEventListener('value-changed', (event: any) => {
+  //      this.benchMarkComboBoxChanged(event);
+  //    });
+  // }
+  // benchMarkComboBoxChanged(event: any): void {
+  //   this.benchMark = event.detail.value;
+  //   console.log("benchMark = " +this.benchMark);
+  // }
+
+  initializeBenchMarkComboBox(benchMarks : any): void {
+    const comboBox = document.getElementById('selectBenchMark') as any;
+
+    const benchMarkItems = JSON.parse(JSON.stringify(benchMarks));
+    
+    console.log(JSON.parse(JSON.stringify(benchMarks))["1325289600000"]);
+    //console.log(JSON.stringify(benchMarks).serialize());
+    const temp = [];
+
+    benchMarkItems.forEach(benchMark => {
+      temp.push({ label: benchMark , value: benchMark.value });
+    });
+    console.log(temp);
+    
+    comboBox.data = benchMarkItems;
+    comboBox.addEventListener('value-changed', (event: any) => {
+       this.benchMarkComboBoxChanged(event);
+     });
+  }
+
+  benchMarkComboBoxChanged(event: any): void {
+    this.benchMarks = event.detail.value;
+    console.log("benchMark value= " +this.benchMarks);
+  }
+
+
+
   onSubmit() : void {  
+    this.loading = true;
+    setTimeout(()=> this.loading=false,10000);
     this.onSelectFromDate(); 
     this.onSelectToDate();   
     var isProperDates :boolean = this.validateDate(this.fromDate,this.toDate);
@@ -164,215 +243,41 @@ ngOnInit(): void {
     //console.log("signal =" +signal.value);
   }
 
-  // renderPerformanceGrid() {
-  //   this.loading = true;
-  //   var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','strCol7','strCol8',
-  //                 'strCol9','strCol10', 'strCol11','strCol12','strCol13','strCol14','strCol15','strCol16',
-  //                 'strCol17','strCol18','strCol19','strCol20'];
-  //   var grid = document.getElementById('grid1') as any;
-  //   var temp_fromdate =document.getElementById("from-date") as any;
-  //   this.fromDate=temp_fromdate.value;
-  //   var temp_todate=document.getElementById("to-date") as any;
-  //   this.toDate=temp_todate.value;
-  //   //var signal = document.getElementById('selectSignal') as any;
-  //   var benchMark = document.getElementById('selectBenchMark') as any;
-  //   var benchMarkFlag : any = benchMark.value;
-  //   var spread = document.getElementById('spread') as any;
-  //   var spreadFlag : any = spread.value;
-
-  //   var selectFractile : any = document.getElementById("selectFractile") as any;
-  //   var fractileSelected : any = selectFractile.value;
-  //   var userFractileSelected = parseInt(fractileSelected, 10);
-  //   var userFractileSelected = userFractileSelected+3;
-  //   //console.log("userFractileSelected="+ userFractileSelected);
-
-  //    this.observationArray=[];
-  //    this.validObservations=[];
-  //    this.cumulativeReturns=[];
-  //    this.CAGR = [];
-  //    this.annualizedVolatility = [];
-
-  //    for(var i=0;i<=userFractileSelected;i++){
-  //     if(i==0){
-  //     this.observationArray.push("Total Observations");
-  //     this.validObservations.push("Valid Observations");
-  //     this.cumulativeReturns.push("Cumulative Returns");
-  //     this.CAGR.push("C A G R");
-  //     this.annualizedVolatility.push("Annualized Volatility");
-  //     }
-  //     else if(i==userFractileSelected-2){               
-  //       this.observationArray.push(spread.value);
-  //       this.validObservations.push(spread.value)
-  //       this.cumulativeReturns.push(spread.value);
-  //       this.CAGR.push(spread.value);
-  //       this.annualizedVolatility.push(spread.value);
-  //     }
-  //     else if(i==userFractileSelected-1){               
-  //       this.observationArray.push(benchMark.value);
-  //       this.validObservations.push(benchMark.value);
-  //       this.cumulativeReturns.push(benchMark.value);
-  //       this.CAGR.push(benchMark.value);
-  //       this.annualizedVolatility.push(benchMark.value);
-  //     }
-  //     else{
-  //       this.observationArray.push("148"); 
-  //       this.validObservations.push("111");
-  //       this.cumulativeReturns.push("605");
-  //       this.CAGR.push("128");
-  //       this.annualizedVolatility.push("0.012");
-  //     }
-  //   }
-     
-    
-//     const performanceGrid = [
-//       ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,
-//                     this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
-//       ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,
-//                   this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
-//       this.observationArray,  
-//       this.validObservations,  
-//       this.cumulativeReturns,
-//       this.CAGR,
-//       this.annualizedVolatility,
-//       this.rowArray
-//       ] as any;
-
-//      if(spreadFlag =="True" && benchMarkFlag!=='null'){
-//       this.columnArray=[];
-//       for(var i=1;i<=userFractileSelected;i++){
-//         if(i==1){
-//           this.columnArray.push({title:'Metric',field :'strCol'+i.toString()})
-//         }
-//         else if(i==userFractileSelected){
-//           this.columnArray.push({title: 'BenchMark' ,field :'strCol'+i.toString()})
-//         } 
-//         else if(i==userFractileSelected-1){
-//           this.columnArray.push({title: 'Long/Short Spread' ,field :'strCol'+i.toString()})
-//         } 
-//         else{
-//           this.columnArray.push({title:'Q'+(i-1).toString(),field :'strCol'+i.toString()})
-//         }
-//       }
-//       grid.config = {
-//         rowHeight: 40,
-//       sorting: {
-//       sortableColumns: true
-//       },
-//       columns:this.columnArray,
-//     dataModel: { 
-//     fields: fields,
-//     data : performanceGrid
-//     }}; 
-//    }
-
-//    else if(spreadFlag=="True" && benchMarkFlag==='null'){
-//         this.columnArray=[];
-//       for(var i=1;i<=userFractileSelected-1;i++ ){
-//         if(i==1){
-//           this.columnArray.push({title:'Metric',field :'strCol'+i.toString()})
-//         }
-//         else if(i==userFractileSelected-1){
-//           this.columnArray.push({title: 'Long/Short Spread' ,field :'strCol'+i.toString()})
-//         } 
-//         else{
-//           this.columnArray.push({title:'Q'+(i-1).toString(),field :'strCol'+i.toString()})
-//         }
-//       }
-//     grid.config = {
-//       rowHeight: 40,
-//     sorting: {
-//     sortableColumns: true
-//     },
-//     columns: this.columnArray,
-//   dataModel: { 
-//   fields: fields,
-//   data : performanceGrid
-//   }}; 
-//   }
-
-//   else if (spreadFlag=="False" && benchMarkFlag!=='null'){
-//     this.columnArray=[];
-//       for(var i=1;i<=userFractileSelected-1;i++ ){
-//         if(i==1){
-//           this.columnArray.push({title:'Metric',field :'strCol'+i.toString()})
-//         }
-//         else if(i==userFractileSelected-1){
-//           this.columnArray.push({title: 'BenchMark' ,field :'strCol'+i.toString()})
-//         } 
-//         else{
-//           this.columnArray.push({title:'Q'+(i-1).toString(),field :'strCol'+i.toString()})
-//         }
-//       }
-
-//     grid.config = {
-//       rowHeight: 40,
-//     sorting: {
-//     sortableColumns: true
-//     },
-//     columns: this.columnArray,
-//   dataModel: { 
-//   fields: fields,
-//   data : performanceGrid
-//   }}; 
-//   }
-
-//   else if (spreadFlag=="False" && benchMarkFlag==='null'){
-//     this.columnArray=[];
-//       for(var i=1;i<=userFractileSelected-2;i++){
-//         if(i==1){
-//           this.columnArray.push({title:'Metric',field :'strCol'+i.toString()})
-//         }
-//         else{
-//           this.columnArray.push({title:'Q'+(i-1).toString(),field :'strCol'+i.toString()})
-//         }
-//       }
-//     grid.config = {
-//       rowHeight: 40,
-//     sorting: {
-//     sortableColumns: true
-//     },
-//     columns: this.columnArray,
-//   dataModel: { 
-//   fields: fields,
-//   data : performanceGrid
-//   }}; 
-//   }
-// }
-  
 
 renderPerformanceGrid() {
-  console.log("Inside renderPerformanceGrid");
-  var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','strCol7','strCol8'
-                  // 'strCol9','strCol10', 'strCol11','strCol12','strCol13','strCol14','strCol15','strCol16',
-                  //  'strCol17','strCol18','strCol19','strCol20'
+  var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','strCol7','strCol8',
+                   'strCol9','strCol10', 'strCol11','strCol12','strCol13','strCol14','strCol15','strCol16',
+                    'strCol17','strCol18','strCol19','strCol20'
                   ];
-  var grid = document.getElementById('grid1') as any;
+  var grid = document.getElementById('grid') as any;
   var temp_fromdate =document.getElementById("from-date") as any;
     this.fromDate=temp_fromdate.value;
     var temp_todate=document.getElementById("to-date") as any;
     this.toDate=temp_todate.value;
-    //var signal = document.getElementById('selectSignal') as any;
     var benchMark = document.getElementById('selectBenchMark') as any;
-    var benchMarkFlag : any = benchMark.value;
+    var bMFlag : any = benchMark.value;
+    //console.log("bMFlag== "+ bMFlag);
     var spread = document.getElementById('spread') as any;
-    var spreadFlag : any = spread.value;
-
+    var spFlag : any = spread.value;
+    //console.log("spFlag== "+ spFlag);
     var selectFractile : any = document.getElementById("selectFractile") as any;
     var fractileSelected : any = selectFractile.value;
     var userFractileSelected = parseInt(fractileSelected, 10);
-    console.log("userFractileSelected="+ userFractileSelected);
-    var userFractileSelected = userFractileSelected+3;
-    console.log("userFractileSelected2= "+ userFractileSelected);
+    //console.log("userFractileSelected= "+ userFractileSelected);
+    var userFractileSelected = userFractileSelected+2;
+    //console.log("userFractileSelected2= "+ userFractileSelected);
 
-     this.observationArray=["44","55","66","77","88","99"];
-     this.validObservations=[];
-     this.cumulativeReturns=[];
-     this.CAGR = [];
-     this.annualizedVolatility = [];
+
+    this.observationArray=["44","55","66","77","88","99","101"];
+    this.validObservations= ["44","55","66","77","88","99","101"];
+    this.cumulativeReturns=["44","55","66","77","88","99","101"];
+    this.CAGR =["44","55","66","77","88","99","101"];
+    this.annualizedVolatility =["44","55","66","77","88","99","101"];
+    this.informationRatio =["44","55","66","77","88","99","101"];
 
   this.columnNames=[];
 
-  this.columnNames.push({title:'Metric', field :fields[0]})
+  this.columnNames.push({title:'Metric', field :fields[0] , width : 150})
   this.columnNames.push({title:'Total Observations',field :fields[1]})
   this.columnNames.push({title:'Valid Observations',field :fields[2]})
   this.columnNames.push({title:'Cumulative Returns',field :fields[3]})
@@ -384,37 +289,43 @@ renderPerformanceGrid() {
   this.columnNames.push({title:'Kurtosis',field :fields[9]})
   this.columnNames.push({title:'Hit Ratio',field :fields[10]})
   this.columnNames.push({title:'Maximum Drawdown',field :fields[11]})
-//this.columnNames.push({title:'Value-at-Risk 95%',field :fields[12]})
- // this.columnNames.push({title:'Expected Shortfall 95',field :fields[13]})
- // this.columnNames.push({title:'  Turnover',field :fields[14]})
+  //this.columnNames.push({title:'Value-at-Risk 95%',field :fields[12]})
+  //this.columnNames.push({title:'Expected Shortfall 95',field :fields[13]})
+  //this.columnNames.push({title:'Turnover',field :fields[14]})
 
 
-  this.rowArray=[];
-  this.rowArray1=[];
-  this.rowArray2=[];
-
-  
-  console.log("Array contents =" + this.observationArray[0]);
-  for(var i=1;i< userFractileSelected;i++){
-    console.log("Inside For Loop ");
-  
-  this.rowArray.push("Q1",this.observationArray[i],"34","000","98722","67822","987","56","65","098","45")
-  this.rowArray1.push("Q2","10332","1222","3422","9800","987","67822","45","678","678","009","007")
-  this.rowArray2.push("Q3","132","1222","3422","9800","987","67822","54","678")
-}
-
-
-
-
-  const performanceGrid = [
+  this.rowArray=[
     ["Start Date",this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,
                      this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
     ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,
                    this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
-    this.rowArray,
-    this.rowArray1, 
-    this.rowArray2
-  ] as any;
+    ["Q1","800","34","000","98722","67822","987","56","65","111","78","234"],
+    ["Q2","10332","1222","3422","9800","987","67822","45","678","678","009","007"],
+    ["Q3","132","1222","3422","9800","987","67822","54","678","1222","9800","987"],
+    ["Q4","132","1222","3422","9800","987","67822","54","678","378","34","500"],
+    ["Q5","800","34","000","98722","67822","987","56","65","111","987","009"],
+    ["Q6","10332","1222","3422","9800","987","567","45","678","678","009","007"],
+    ["Q7","132","1222","3422","1200","987","678","54","678","4567","9800","987"],
+    ["Q8","132","234","3422","009","987","888","54","678","222","345","009"],
+    ["Q9","132","389","3422","109","973","888","54","678","222","111","111"],
+    ["Q10","132","389","3422","109","973","777","54","678","222","111","111"]
+  ];
+
+  this.rowArrayFlag=[
+    ["Long/Short spread",spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag],
+    ["BenchMark",bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag]
+  ];
+
+  this.rowArrayData=[];
+  for(var i=0; i<userFractileSelected ;i++){
+    this.rowArrayData.push(this.rowArray[i]);
+  }
+  if(spFlag=="True"){
+    this.rowArrayData.push(this.rowArrayFlag[0]);
+  }
+  if(bMFlag!=='null' && bMFlag!==''){
+    this.rowArrayData.push(this.rowArrayFlag[1]);
+  }
 
 grid.config = {
     sorting: {
@@ -423,7 +334,7 @@ grid.config = {
   columns: this.columnNames,
   dataModel: {
     fields: fields,
-    data : performanceGrid
+    data : this.rowArrayData
   }
 };
 }
@@ -434,20 +345,19 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
   var multiplechart : any = document.getElementById("multiple") as any;
      var selectFractile : any = document.getElementById("selectFractile") as any;
      var benchMark = document.getElementById('selectBenchMark') as any;
-     var benchMarkFlag : any = benchMark.value;
+     var bMFlag : any = benchMark.value;
      var spread = document.getElementById('spread') as any;
-     var spreadFlag : any = spread.value;
-
+     var spFlag : any = spread.value;
      var temp_series :any = [];
      this.start_Date = startDate1;
      this.end_Date = endDate1;
      for(var i= 0;i<selectFractile.value;i++){
        temp_series.push({symbol:'Q'+(i+1).toString(),type:'line',data:this.generateChart()});
      }
-     if(spreadFlag=="True"){
+     if(spFlag=="True"){
      temp_series.push({symbol:'Long/Short Spread',type:'line',data:this.generateChart()});
      }
-     if(benchMarkFlag!=='null'){
+     if(bMFlag!=='null'){
      temp_series.push({symbol:'BenchMark',type:'line',data:this.generateChart()});
      }
     multiplechart.config = {
@@ -458,10 +368,9 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
       },  
       series:temp_series
     }
-  }
+}
    
   generateChart() {    
-    this.loading = true;        
     let initVal = 20;
      const startDate = new Date(this.start_Date);
      const endDate = new Date(this.end_Date);
@@ -480,4 +389,16 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
     return ret;
   }
+
+  retrieveBenchMarks() {
+    console.log("Inside retrieveBenchMark");
+    fetch(`assets/santosh.json`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data["benchmark"]);
+        this.initializeBenchMarkComboBox(data["benchmark"]);
+      });
+  }
+
+
 }
