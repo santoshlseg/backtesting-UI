@@ -1,4 +1,8 @@
-<amber-loader *ngIf="loading"></amber-loader>
+
+<!-- <amber-loader *ngIf="loading"></amber-loader> -->
+<!-- <div class="item">
+  <amber-loader *ngIf="loading"></amber-loader>
+</div> -->
 <header>
   <nav class="main">
     <ul>
@@ -7,6 +11,7 @@
   </nav>
 </header>
 
+<div class="content" role="main">
   <carbon-sidebar-layout id="layout" sidebar-width="200px">
     <coral-header slot="sidebar-header" level="1">Title</coral-header>
     <coral-panel spacing slot="sidebar-content"><br>
@@ -15,66 +20,47 @@
       <coral-select id="selectUniverseComboBox"></coral-select>
     </quartz-layout>
 
-    <quartz-layout >
+     <quartz-layout >
       <label> From Date :</label><br>
-         <emerald-datetime-picker id="from-date" value="2022-01-01" (click)="onSelectFromDate()"> 
+         <emerald-datetime-picker id="from-date" value="2022-01-01" min="2022-01-01" max="2022-11-02"
+         (click)="onSelectFromDate()"> 
         </emerald-datetime-picker>
     </quartz-layout>
 
     <quartz-layout > 
         <label> To Date :</label><br>
-        <emerald-datetime-picker id="to-date" value="2022-10-30" max="2022-11-30" (click)="onSelectToDate()">
+        <emerald-datetime-picker id="to-date" value="2022-10-30" min="2022-01-01" max="2022-11-02" 
+        (click)="onSelectToDate()">
         </emerald-datetime-picker>
-    </quartz-layout>
-    
+    </quartz-layout> 
+
     <quartz-layout>
       <label>Select Fractile :</label><br>
-      <coral-select id="selectFractile">
-      <coral-item value=1 selected>1</coral-item>
-      <coral-item value=2>2</coral-item>
-      <coral-item value=3>3</coral-item>
-      <coral-item value=4>4</coral-item>
-      <coral-item value=5>5</coral-item>
-      <coral-item value=6>6</coral-item>
-      <coral-item value=7>7</coral-item>
-      <coral-item value=8>8</coral-item>
-      <coral-item value=9>9</coral-item>
-      <coral-item value=10>10</coral-item>
-      <coral-item value=15>12</coral-item>
-      </coral-select>
+        <coral-number-field id="selectFractile" min="1" max="15" value=1>1</coral-number-field>
+    </quartz-layout> 
+    
+    <quartz-layout>
+        <label>Select Signal :</label><br>
+        <coral-select id="selectSignal"></coral-select>
     </quartz-layout>
 
     <quartz-layout>
-        <label>Select Signal :</label><br>
-        <coral-select id="selectSignal">
-        <coral-item value="PMST">StarMine Price Momentum Short Term</coral-item>
-        <coral-item value="PMMT">StarMine Price Momentum Medium Term</coral-item>
-        <coral-item value="PMLT">StarMine Price Momentum Long Term</coral-item>
-        <coral-item value="ARMG">StarMine Analyst Revision Global</coral-item>
-        </coral-select>
-      </quartz-layout>
-
-      <quartz-layout>
         <label>Select BenchMark :</label><br>
-        <coral-select id="selectBenchMark">
-          <coral-item value=null>None</coral-item>
-          <coral-item value="Equal Weight">EQWT</coral-item>
-          <coral-item value=".STI">Strait Times Index</coral-item>
-          <coral-item value=".CSI300">China Securities Index</coral-item>
-          <coral-item value=".FTSE">FTSE 100</coral-item>
-          <coral-item value=".SPX">S&P 500</coral-item>
-          <coral-item value=".BSESN" selected>Sensex</coral-item>
-          <coral-item value=".GSPTSE">S&P/TSX</coral-item>
-        </coral-select>  
-      </quartz-layout> 
+        <coral-select id="selectBenchMark"></coral-select> 
+    </quartz-layout> 
 
-      <quartz-layout >
+    <quartz-layout >
         <label>Long/Short Spread :</label><br>
-        <coral-select id="spread" >  
+        <coral-select id="spread">  
         <coral-item value="True" selected>True</coral-item>
         <coral-item value="False">False</coral-item>
         </coral-select>
-      </quartz-layout> 
+    </quartz-layout> 
+
+    <quartz-layout >
+      <label>Toggle Button :</label><br>
+      <coral-toggle label="OFF" checked-label="ON"></coral-toggle>
+    </quartz-layout >
     
     <quartz-layout>
       <coral-button toggles id="submitBtn" class="large" (click)="onSubmit()">Generate Report</coral-button>
@@ -88,8 +74,10 @@
     <coral-panel spacing slot="main-content">
       <sapphire-interactive-chart id="multiple"></sapphire-interactive-chart>
       <p>Key Performance Metrices : </p> 
-     <emerald-grid id="grid1"></emerald-grid>
-     <!-- <emerald-grid id="grid"></emerald-grid> -->
+     <emerald-grid id="grid"></emerald-grid>
     </coral-panel>
   </carbon-sidebar-layout>
-
+<!-- Footer -->
+<footer>
+</footer>
+</div>
