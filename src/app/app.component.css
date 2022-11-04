@@ -13,6 +13,10 @@ nav.main ul {
     padding: 0;
 }
 
+emerald-datetime-picker {
+    width: 100%;
+}
+
 nav.main li {
     list-style: none;
     display: inline-block;
@@ -85,13 +89,11 @@ coral-item {
     text-align: left; 
 }
 coral-number-field.value-input {
-    width: 60px;
+    width: 80px;
 }
 body{
     padding-bottom: 200px;
 }
-
-
 
 #logo{
     width: 60px;
@@ -129,7 +131,6 @@ quartz-layout {
     margin-bottom :18px;
   }
 
-
 .large {
   height: 30px;
   min-width: 90px;
@@ -140,8 +141,16 @@ emerald-grid {
     height: 500px;
   }
 
+
+.content {                   /*amber loader */                
+    position: relative;
+    height: 50px;
+  }
+
 .item {
     position: relative;
     height: 50px;
   }
+
+
 
