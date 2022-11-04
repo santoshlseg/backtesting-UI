@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import sampleData from '../assets/data.json';
 import performanceData from '../assets/performance.json';
 import priceData from '../assets/prices.json';
-import benchmark from '../assets/santosh.json';
+import bench from '../assets/santosh.json';
 
 
 import '@elf/amber-loader';
@@ -44,6 +44,7 @@ import '@elf/quartz-layout/themes/halo/light';
 import '@elf/sapphire-bar/themes/halo/light';
 import '@elf/sapphire-interactive-chart/themes/halo/light';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -69,20 +70,20 @@ signal: Array<any> = [
   { label: 'StarMine Analyst Revision Global', value: 'ARMG' }
 ];
 
-// benchMark : Array<any> = [
-//   { label: 'None', value: 'null' },
-//   { label: 'EQWT', value: 'Equal Weight' },
-//   { label: 'Strait Times Index', value: '.STI' },
-//   { label: 'China Securities Index', value: '.CSI300' },
-//   { label: 'FTSE 100', value: '.FTSE' },
-//   { label: 'S&P 500', value: '.FTSE' },
-//   { label: 'Sensex', value: '.BSESN' , selected: true},
-//   { label: 'S&P/TSX', value: '.GSPTSE' }
-// ];
-
-benchMarks : Array<any> = [
-  { label: 'EQWT', value: 'Equal Weight' }
+stdBenchMark : Array<any> = [
+  { label: 'None', value: 'null' },
+  { label: 'EQWT', value: 'Equal Weight' },
+  { label: 'Strait Times Index', value: '.STI' },
+  { label: 'China Securities Index', value: '.CSI300' },
+  { label: 'FTSE 100', value: '.FTSE' },
+  { label: 'S&P 500', value: '.FTSE' },
+  { label: 'Sensex', value: '.BSESN' , selected: true},
+  { label: 'S&P/TSX', value: '.GSPTSE' }
 ];
+
+// benchMarks : Array<any> = [
+//   { label: 'EQWT', value: 'Equal Weight' , selected: true }
+// ];
 
 performance : any;
 dateFormat : any;
@@ -98,9 +99,6 @@ columnNames : Array<any> = [];
 rowArray : Array<any> = [];
 rowArrayFlag : Array<any> = [];
 rowArrayData : Array<any> = [];
-rowArray2 : Array<any> = [];
-rowArray3 : Array<any> = [];
-rowArray4 : Array<any> = [];
 observationArray : any =[];
 validObservations : any =[];
 cumulativeReturns : any = [];
@@ -119,10 +117,12 @@ ngOnInit(): void {
     this.onSubmit();
     this.initializeUniverseComboBox();   
     this.initializeSignalComboBox();  
-    this.initializeBenchMarkComboBox(this.benchMarks);      
+    this.initializeBenchMarkComboBox();   
     this.initializeLayoutEvent();
     this.onSelectSignal();
-    this.retrieveBenchMarks();
+    this.readBMfromJsonfile();
+    this.readPricesfromJsonfile();
+    this.readWeightsfromJsonfile();
   }                    
 
   initializeUniverseComboBox(): void {
@@ -148,45 +148,50 @@ ngOnInit(): void {
     console.log("signal = " +this.signal);
   }
 
-  // initializeBenchMarkComboBox(): void {
-  //   const comboBox = document.getElementById('selectBenchMark') as any;
-  //   comboBox.data = this.benchMark;
-  //   comboBox.addEventListener('value-changed', (event: any) => {
-  //      this.benchMarkComboBoxChanged(event);
-  //    });
-  // }
-  // benchMarkComboBoxChanged(event: any): void {
-  //   this.benchMark = event.detail.value;
-  //   console.log("benchMark = " +this.benchMark);
-  // }
-
-  initializeBenchMarkComboBox(benchMarks : any): void {
+  initializeBenchMarkComboBox(): void {
     const comboBox = document.getElementById('selectBenchMark') as any;
-
-    const benchMarkItems = JSON.parse(JSON.stringify(benchMarks));
-    
-    console.log(JSON.parse(JSON.stringify(benchMarks))["1325289600000"]);
-    //console.log(JSON.stringify(benchMarks).serialize());
-    const temp = [];
-
-    benchMarkItems.forEach(benchMark => {
-      temp.push({ label: benchMark , value: benchMark.value });
-    });
-    console.log(temp);
-    
-    comboBox.data = benchMarkItems;
+    comboBox.data = this.stdBenchMark;
     comboBox.addEventListener('value-changed', (event: any) => {
        this.benchMarkComboBoxChanged(event);
      });
   }
-
   benchMarkComboBoxChanged(event: any): void {
-    this.benchMarks = event.detail.value;
-    console.log("benchMark value= " +this.benchMarks);
+    this.stdBenchMark = event.detail.value;
+    console.log("benchMark = " +this.stdBenchMark);
   }
 
+  readBMfromJsonfile(): void {                             
+    const temp = [];
+    const benchMarkItems = JSON.parse(bench.benchmark.toString())[0];
+    //console.log(JSON.parse(bench.benchmark.toString())[0]);
+    for(var item in benchMarkItems){
+      temp.push({label : item, value : benchMarkItems[item]});
+      //console.log("item  ="+ item);
+      //console.log("Benchmark value ="+ benchMarkItems[item]);
+    }
+  }
+  
+  readPricesfromJsonfile(): void {                             
+    const temp = [];
+    const priceItems = JSON.parse(bench.prices.toString())[0];
+    for(var item in priceItems){
+      temp.push({label : item, value : priceItems[item]});
+      //console.log("item  ="+ item);
+      //console.log("Price value ="+ priceItems[item]);
+    }
+  }
 
+  readWeightsfromJsonfile() : void {
+    const temp = [];
+    const weightItems = JSON.parse(bench.weights.Q1.toString())[0];
+    for(var item in weightItems){
+      temp.push({label : item, value : weightItems[item]});
+      //console.log("item  ="+ item);
+      console.log("Weight value ="+ weightItems[item]);
+    }
+  }
 
+  
   onSubmit() : void {  
     this.loading = true;
     setTimeout(()=> this.loading=false,10000);
@@ -202,7 +207,6 @@ ngOnInit(): void {
     this.toDate=temp_todate.value;
     this.displayMultipleChart(this.fromDate,this.toDate);
     this.renderPerformanceGrid();
-    //this.generateChart();
   }
 
   initializeLayoutEvent(): void {
@@ -243,6 +247,17 @@ ngOnInit(): void {
     //console.log("signal =" +signal.value);
   }
 
+  onSelectSpread(){
+  //    var text = document.getElementById('text');
+  //    var toggle = document.getElementById('toggle');
+
+  //    text.innerHTML = 'OFF';
+
+  //    toggle.addEventListener('checked-changed', function (e) {
+  //     text.innerHTML = e.target.checked ? 'ON' : 'OFF';
+  // });
+  }
+
 
 renderPerformanceGrid() {
   var fields = ['strCol1','strCol2','strCol3','strCol4', 'strCol5','strCol6','strCol7','strCol8',
@@ -256,27 +271,14 @@ renderPerformanceGrid() {
     this.toDate=temp_todate.value;
     var benchMark = document.getElementById('selectBenchMark') as any;
     var bMFlag : any = benchMark.value;
-    //console.log("bMFlag== "+ bMFlag);
     var spread = document.getElementById('spread') as any;
     var spFlag : any = spread.value;
-    //console.log("spFlag== "+ spFlag);
     var selectFractile : any = document.getElementById("selectFractile") as any;
     var fractileSelected : any = selectFractile.value;
     var userFractileSelected = parseInt(fractileSelected, 10);
-    //console.log("userFractileSelected= "+ userFractileSelected);
     var userFractileSelected = userFractileSelected+2;
-    //console.log("userFractileSelected2= "+ userFractileSelected);
-
-
-    this.observationArray=["44","55","66","77","88","99","101"];
-    this.validObservations= ["44","55","66","77","88","99","101"];
-    this.cumulativeReturns=["44","55","66","77","88","99","101"];
-    this.CAGR =["44","55","66","77","88","99","101"];
-    this.annualizedVolatility =["44","55","66","77","88","99","101"];
-    this.informationRatio =["44","55","66","77","88","99","101"];
 
   this.columnNames=[];
-
   this.columnNames.push({title:'Metric', field :fields[0] , width : 150})
   this.columnNames.push({title:'Total Observations',field :fields[1]})
   this.columnNames.push({title:'Valid Observations',field :fields[2]})
@@ -306,9 +308,14 @@ renderPerformanceGrid() {
     ["Q5","800","34","000","98722","67822","987","56","65","111","987","009"],
     ["Q6","10332","1222","3422","9800","987","567","45","678","678","009","007"],
     ["Q7","132","1222","3422","1200","987","678","54","678","4567","9800","987"],
-    ["Q8","132","234","3422","009","987","888","54","678","222","345","009"],
-    ["Q9","132","389","3422","109","973","888","54","678","222","111","111"],
-    ["Q10","132","389","3422","109","973","777","54","678","222","111","111"]
+    ["Q8","132","234","3422","009","987","888","54","678","55","345","009"],
+    ["Q9","132","389","3422","109","973","888","54","678","222","88","111"],
+    ["Q10","132","389","3422","109","973","999","54","678","55","88","99"],
+    ["Q11","132","389","3422","109","973","99","54","678","222","888","99"],
+    ["Q12","99","389","3422","109","973","333","54","678","222","888","99"],
+    ["Q13","99","99","99","109","973","555","54","678","55","66","888"],
+    ["Q14","99","389","3422","109","973","99","54","678","222","111","99"],
+    ["Q15","132","389","3422","109","973","99","54","678","55","111","15511"]
   ];
 
   this.rowArrayFlag=[
@@ -376,6 +383,7 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
      const endDate = new Date(this.end_Date);
     const ret = [];
     const total = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    //console.log("total="+total);
     for (let i = 0; i < total; i++) {
         const volatility = (Math.random() * (4.5) - 2) / 100; // random % volatility
         const date = new Date(startDate.setDate(startDate.getDate() + 1));
@@ -389,16 +397,5 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
     return ret;
   }
-
-  retrieveBenchMarks() {
-    console.log("Inside retrieveBenchMark");
-    fetch(`assets/santosh.json`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data["benchmark"]);
-        this.initializeBenchMarkComboBox(data["benchmark"]);
-      });
-  }
-
 
 }
