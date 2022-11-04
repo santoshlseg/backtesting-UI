@@ -81,9 +81,6 @@ stdBenchMark : Array<any> = [
   { label: 'S&P/TSX', value: '.GSPTSE' }
 ];
 
-// benchMarks : Array<any> = [
-//   { label: 'EQWT', value: 'Equal Weight' , selected: true }
-// ];
 
 performance : any;
 dateFormat : any;
@@ -99,16 +96,8 @@ columnNames : Array<any> = [];
 rowArray : Array<any> = [];
 rowArrayFlag : Array<any> = [];
 rowArrayData : Array<any> = [];
-observationArray : any =[];
-validObservations : any =[];
-cumulativeReturns : any = [];
-CAGR : any = [];
-annualizedVolatility : any =[];
-informationRatio : any=[];
-
 start_Date :any = '2022-01-01';          
 end_Date : any = '2022-12-31';
-
 
 constructor(){}
   
@@ -123,6 +112,7 @@ ngOnInit(): void {
     this.readBMfromJsonfile();
     this.readPricesfromJsonfile();
     this.readWeightsfromJsonfile();
+    this.retrieveBenchMarks();
   }                    
 
   initializeUniverseComboBox(): void {
@@ -166,8 +156,8 @@ ngOnInit(): void {
     //console.log(JSON.parse(bench.benchmark.toString())[0]);
     for(var item in benchMarkItems){
       temp.push({label : item, value : benchMarkItems[item]});
-      //console.log("item  ="+ item);
-      //console.log("Benchmark value ="+ benchMarkItems[item]);
+      //console.log(new Date(parseInt(item)));
+      console.log("Benchmark value ="+ benchMarkItems[item]);
     }
   }
   
@@ -186,8 +176,10 @@ ngOnInit(): void {
     const weightItems = JSON.parse(bench.weights.Q1.toString())[0];
     for(var item in weightItems){
       temp.push({label : item, value : weightItems[item]});
-      //console.log("item  ="+ item);
-      console.log("Weight value ="+ weightItems[item]);
+      //console.log("item  ="+ (item));
+      // const date = new Date(1325289600000);
+      //console.log("item  ="+ date);
+      //console.log("Weight value ="+ weightItems[item]);
     }
   }
 
@@ -377,7 +369,7 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
 }
    
-  generateChart() {    
+generateChart() {    
     let initVal = 20;
      const startDate = new Date(this.start_Date);
      const endDate = new Date(this.end_Date);
@@ -397,5 +389,19 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
     return ret;
   }
+
+  retrieveBenchMarks() {
+    console.log("Inside retrieveBenchMark");
+    fetch(`assets/santosh.json`)
+      .then((response) => console.log(response))
+      .then(data => console.log(data));
+      // {
+      //   console.log(fetch(`assets/santosh.json`));
+      //   //console.log(data["benchmark"]);
+      //   //console.log("Data=" +data);
+      //   // console.log(response);
+      //  return data;
+      // });
+ }
 
 }
