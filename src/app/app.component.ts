@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import sampleData from '../assets/data.json';
-import performanceData from '../assets/performance.json';
-import priceData from '../assets/prices.json';
-import bench from '../assets/santosh.json';
+//import sampleData from '../assets/data.json';
+//import performanceData from '../assets/performance.json';
+//import priceData from '../assets/prices.json';
+//import bench from '../assets/santosh.json';
 
 
 import '@elf/amber-loader';
@@ -81,7 +81,6 @@ stdBenchMark : Array<any> = [
   { label: 'S&P/TSX', value: '.GSPTSE' }
 ];
 
-
 performance : any;
 dateFormat : any;
 loading : boolean= true;
@@ -98,21 +97,31 @@ rowArrayFlag : Array<any> = [];
 rowArrayData : Array<any> = [];
 start_Date :any = '2022-01-01';          
 end_Date : any = '2022-12-31';
+entries : any = [];
+keys : any = [];
+arr2 :any =[];
+bmObject : any = [];
+weiObject : any = [];
+weiArray : any = [];
+bmArray :any = [];
+
+dateArr : any = [];
+valArr : any = [];
 
 constructor(){}
   
 ngOnInit(): void {  
     this.loading = false;
+    this.retrieveBenchMarks();
+    this.getBMData(this.entries);            // Loading data in Array 
+
     this.onSubmit();
     this.initializeUniverseComboBox();   
     this.initializeSignalComboBox();  
     this.initializeBenchMarkComboBox();   
     this.initializeLayoutEvent();
     this.onSelectSignal();
-    this.readBMfromJsonfile();
-    this.readPricesfromJsonfile();
-    this.readWeightsfromJsonfile();
-    this.retrieveBenchMarks();
+         //this.retrieveBenchMarks();
   }                    
 
   initializeUniverseComboBox(): void {
@@ -150,39 +159,51 @@ ngOnInit(): void {
     console.log("benchMark = " +this.stdBenchMark);
   }
 
-  readBMfromJsonfile(): void {                             
-    const temp = [];
-    const benchMarkItems = JSON.parse(bench.benchmark.toString())[0];
-    //console.log(JSON.parse(bench.benchmark.toString())[0]);
-    for(var item in benchMarkItems){
-      temp.push({label : item, value : benchMarkItems[item]});
-      //console.log(new Date(parseInt(item)));
-      console.log("Benchmark value ="+ benchMarkItems[item]);
+
+  getBMData(entries: Object): void {
+    for (const [key, value] of Object.entries(entries)) {
+      //console.log(`${key}  ${value}`); 
+      if (typeof value=='string') {
+         if(key=='benchmark'){
+           this.bmObject = JSON.parse(value);          // Take the values in an object
+         }
+      }
+      else {
+        console.log("Non string Key here ");
+        //console.log("key="+ key, "\n value=" +JSON.stringify(value));
+        if(key=='weights'){
+          this.weiObject = JSON.stringify(value);
+        }
+        console.log("Size of this.weiObject  "+ this.weiObject.length);
+      }
+        for (const [key, value] of Object.entries(this.weiObject)) {
+          console.log(`${key}  ${value}`);
+        }
     }
+    console.log(this.weiObject);  
+
+    this.bmObject.forEach(item => {
+      for (let key in item) {
+        //console.log(`${key}: ${item[key]}`)
+        this.bmArray.push(key,item[key]);        // key is a date when required can be changed to date
+      }
+    })
+    // for(var i=0;i<this.bmArray.length;i++){
+    //   console.log(this.bmArray[i]);
+    // }
+     this.weiObject.forEach(item => {
+      for (let key in item) {
+        console.log(`${key}: ${item[key]}`)
+        //this.bmArray.push(key,item[key]);        
+      }
+    })
+    
+
+
+
+
   }
   
-  readPricesfromJsonfile(): void {                             
-    const temp = [];
-    const priceItems = JSON.parse(bench.prices.toString())[0];
-    for(var item in priceItems){
-      temp.push({label : item, value : priceItems[item]});
-      //console.log("item  ="+ item);
-      //console.log("Price value ="+ priceItems[item]);
-    }
-  }
-
-  readWeightsfromJsonfile() : void {
-    const temp = [];
-    const weightItems = JSON.parse(bench.weights.Q1.toString())[0];
-    for(var item in weightItems){
-      temp.push({label : item, value : weightItems[item]});
-      //console.log("item  ="+ (item));
-      // const date = new Date(1325289600000);
-      //console.log("item  ="+ date);
-      //console.log("Weight value ="+ weightItems[item]);
-    }
-  }
-
   
   onSubmit() : void {  
     this.loading = true;
@@ -236,7 +257,6 @@ ngOnInit(): void {
 
   onSelectSignal(){
     var signal=document.getElementById("selectSignal") as any;
-    //console.log("signal =" +signal.value);
   }
 
   onSelectSpread(){
@@ -293,7 +313,7 @@ renderPerformanceGrid() {
                      this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate,this.fromDate],
     ["End Date",this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,this.toDate,
                    this.toDate,this.toDate,this.toDate,this.toDate,this.toDate],
-    ["Q1","800","34","000","98722","67822","987","56","65","111","78","234"],
+    ["Q1","800","34","000","98722","67822","987","56","65","111","78","234","234"],
     ["Q2","10332","1222","3422","9800","987","67822","45","678","678","009","007"],
     ["Q3","132","1222","3422","9800","987","67822","54","678","1222","9800","987"],
     ["Q4","132","1222","3422","9800","987","67822","54","678","378","34","500"],
@@ -311,7 +331,7 @@ renderPerformanceGrid() {
   ];
 
   this.rowArrayFlag=[
-    ["Long/Short spread",spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag],
+    ["Long/Short spread",spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag,spFlag],
     ["BenchMark",bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag,bMFlag]
   ];
 
@@ -357,7 +377,7 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
      temp_series.push({symbol:'Long/Short Spread',type:'line',data:this.generateChart()});
      }
      if(bMFlag!=='null'){
-     temp_series.push({symbol:'BenchMark',type:'line',data:this.generateChart()});
+     temp_series.push({symbol:'BenchMark',type:'line',data:this.generateBMChart()});
      }
     multiplechart.config = {
       options: {
@@ -369,10 +389,13 @@ displayMultipleChart(fromDate1 : string, toDate1 : string): any {
     }
 }
    
-generateChart() {    
+generateChart() { 
+  //console.log("Inside generateChart");
     let initVal = 20;
      const startDate = new Date(this.start_Date);
      const endDate = new Date(this.end_Date);
+     //console.log(startDate);
+     //console.log(endDate);
     const ret = [];
     const total = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
     //console.log("total="+total);
@@ -385,23 +408,59 @@ generateChart() {
             time: date.getTime() / 1000.0,
             value: parseFloat(val.toFixed(2))
         };
+       // console.log("point=" +point.time);
+       // console.log("value =" +point.value);
         ret.push(point);
     }
     return ret;
   }
 
-  retrieveBenchMarks() {
+
+  generateBMChart() { 
+    //console.log("Inside generateBMChart");
+    //console.log("Inside generateBMChart arrSize =" +this.bmArray.length);    
+    const startDate = new Date(this.start_Date);      // user Input Date
+    const endDate = new Date(this.end_Date);
+    //console.log("generateBMChart start dt = " + startDate);
+    //console.log("generateBMChart end dt= " + endDate);
+   const ret = [];
+   const total = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+   //console.log("total= "+ total);
+   this.dateArr = [];
+   for(var i=0;i< this.bmArray.length; i=i+2 ){         
+    this.dateArr.push(this.bmArray[i]);
+   }
+   //console.log("dateArr="+this.dateArr.length);
+  //  for(var k=0 ;k < this.dateArr.length; k++ ){          
+  //   console.log("dateArr =" + this.dateArr[k]);
+  //  }
+  this.valArr = []; 
+   for(var i=1;i< this.bmArray.length; i=i+2 ){            
+    this.valArr.push(this.bmArray[i]);
+   }
+  //   for(var k=0 ;k < this.valArr.length; k++ ){           
+  //   console.log("valArr =" + this.valArr[k]);
+  //  }
+   //console.log("valArray size ="+this.dateArr.length);
+   for (let i = 0; i < 127 ; i++) {
+       const point = {
+            time : this.dateArr[i]/1000,                        // time=1333584000 ::
+            value: this.valArr[i]                               // value = 27.71 :: 
+       };
+       ret.push(point);
+   }
+   return ret;
+  }
+
+
+  retrieveBenchMarks() : any{
     console.log("Inside retrieveBenchMark");
-    fetch(`assets/santosh.json`)
-      .then((response) => console.log(response))
-      .then(data => console.log(data));
-      // {
-      //   console.log(fetch(`assets/santosh.json`));
-      //   //console.log(data["benchmark"]);
-      //   //console.log("Data=" +data);
-      //   // console.log(response);
-      //  return data;
-      // });
- }
+    return fetch(`assets/santosh.json`)
+      .then((response) => response.json())
+      .then((data) => {
+        return this.getBMData(data);
+    });
+  } 
+
 
 }
