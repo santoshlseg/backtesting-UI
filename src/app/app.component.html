@@ -22,14 +22,14 @@
 
      <quartz-layout >
       <label> From Date :</label><br>
-         <emerald-datetime-picker id="from-date" value="2022-01-01" min="2022-01-01" max="2022-11-02"
+         <emerald-datetime-picker id="from-date" value="2012-01-01" min="2012-01-01" max="2022-06-30"
          (click)="onSelectFromDate()"> 
         </emerald-datetime-picker>
     </quartz-layout>
 
     <quartz-layout > 
         <label> To Date :</label><br>
-        <emerald-datetime-picker id="to-date" value="2022-10-30" min="2022-01-01" max="2022-11-02" 
+        <emerald-datetime-picker id="to-date" value="2022-06-30" min="2012-01-01" max="2022-11-30" 
         (click)="onSelectToDate()">
         </emerald-datetime-picker>
     </quartz-layout> 
@@ -38,6 +38,16 @@
       <label>Select Fractile :</label><br>
         <coral-number-field id="selectFractile" min="1" max="15" value=1>1</coral-number-field>
     </quartz-layout> 
+
+    <quartz-layout>
+      <label>Select Frequency :</label><br>
+      <coral-select>
+      <coral-item value="Daily">Daily</coral-item>
+      <coral-item value="Weekly">Weekly</coral-item>
+      <coral-item selected value="Monthly">Monthly</coral-item>
+      <coral-item value="Quarterly">Quarterly</coral-item>
+    </coral-select>
+  </quartz-layout>
     
     <quartz-layout>
         <label>Select Signal :</label><br>
