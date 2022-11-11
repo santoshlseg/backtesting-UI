@@ -30,6 +30,7 @@
     "@elf/coral-slider": "^4.5.36",
     "@elf/coral-tab": "^4.5.38",
     "@elf/coral-tab-bar": "^4.5.44",
+    "@elf/coral-toggle": "^4.5.30",
     "@elf/emerald-datetime-picker": "^4.5.56",
     "@elf/emerald-grid": "^4.7.6",
     "@elf/emerald-multi-select": "^4.7.60",
