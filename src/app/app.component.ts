@@ -104,9 +104,12 @@ bmObject : any = [];
 weiObject : any = [];
 weiArray : any = [];
 bmArray :any = [];
+Q1 : any = [];
+LS : any = [];
 
 dateArr : any = [];
 valArr : any = [];
+tt : any =[];
 
 constructor(){}
   
@@ -156,11 +159,12 @@ ngOnInit(): void {
   }
   benchMarkComboBoxChanged(event: any): void {
     this.stdBenchMark = event.detail.value;
-    console.log("benchMark = " +this.stdBenchMark);
+    //console.log("benchMark = " +this.stdBenchMark);
   }
 
 
   getBMData(entries: Object): void {
+    this.weiObject = [];
     for (const [key, value] of Object.entries(entries)) {
       //console.log(`${key}  ${value}`); 
       if (typeof value=='string') {
@@ -171,36 +175,43 @@ ngOnInit(): void {
       else {
         console.log("Non string Key here ");
         //console.log("key="+ key, "\n value=" +JSON.stringify(value));
-        if(key=='weights'){
-          this.weiObject = JSON.stringify(value);
+        if (key == 'weights') {
+          this.weiObject = JSON.parse(JSON.stringify(value));       
         }
-        console.log("Size of this.weiObject  "+ this.weiObject.length);
       }
-        for (const [key, value] of Object.entries(this.weiObject)) {
-          console.log(`${key}  ${value}`);
-        }
-    }
-    console.log(this.weiObject);  
+    } 
 
+      for (const [key, value] of Object.entries(this.weiObject)) {        // RE-transform value  
+        //console.log(`${key} \t   ${value}`);
+        if (typeof value == 'string') {
+          if (key == 'Q1') {
+            this.Q1 = JSON.parse(value);
+          }
+          if (key == 'LS') {
+            this.LS = JSON.parse(value);
+          }
+          //console.log(this.Q1);
+          //console.log(this.LS.length);
+        }
+      }
+    
+    console.log("Keys=" + Object.keys(this.weiObject));
     this.bmObject.forEach(item => {
       for (let key in item) {
         //console.log(`${key}: ${item[key]}`)
         this.bmArray.push(key,item[key]);        // key is a date when required can be changed to date
       }
     })
-    // for(var i=0;i<this.bmArray.length;i++){
-    //   console.log(this.bmArray[i]);
-    // }
-     this.weiObject.forEach(item => {
-      for (let key in item) {
-        console.log(`${key}: ${item[key]}`)
-        //this.bmArray.push(key,item[key]);        
-      }
-    })
     
-
-
-
+    
+    for (var i=0 ; i< 1 ; i++ ) {
+        console.log(this.Q1[i]);
+        this.tt = this.Q1[1];
+      }
+    
+    // for (const [key, value] of Object.entries(this.tt)) { 
+    //   console.log(`${key} \t   ${value}`);
+    // }
 
   }
   
