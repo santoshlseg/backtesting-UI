@@ -101,14 +101,17 @@ entries : any = [];
 keys : any = [];
 arr2 :any =[];
 bmObject : any = [];
+priceObject : any = [];
 weiObject : any = [];
-weiArray : any = [];
 bmArray :any = [];
+priceArray : any = [];
 Q1 : any = [];
 LS : any = [];
 
 dateArr : any = [];
 valArr : any = [];
+dateArr1 : any = [];
+valArr1 : any = [];
 tt : any =[];
 
 constructor(){}
@@ -147,7 +150,7 @@ ngOnInit(): void {
   }
   signalComboBoxChanged(event: any): void {
     this.signal = event.detail.value;
-    console.log("signal = " +this.signal);
+    //console.log("signal = " +this.signal);
   }
 
   initializeBenchMarkComboBox(): void {
@@ -166,55 +169,40 @@ ngOnInit(): void {
   getBMData(entries: Object): void {
     this.weiObject = [];
     for (const [key, value] of Object.entries(entries)) {
-      //console.log(`${key}  ${value}`); 
+     // console.log(`${key}  ${value}`);   
       if (typeof value=='string') {
          if(key=='benchmark'){
-           this.bmObject = JSON.parse(value);          // Take the values in an object
+           this.bmObject = JSON.parse(value);          
          }
-      }
-      else {
-        console.log("Non string Key here ");
-        //console.log("key="+ key, "\n value=" +JSON.stringify(value));
-        if (key == 'weights') {
-          this.weiObject = JSON.parse(JSON.stringify(value));       
+         if(key=='prices'){
+          this.priceObject = JSON.parse(value);          
         }
       }
+      // else {
+      //   console.log("Non string Key here ");
+      //   console.log("key="+ key, "\n value=" +JSON.stringify(value));
+      // }
     } 
 
-      for (const [key, value] of Object.entries(this.weiObject)) {        // RE-transform value  
-        //console.log(`${key} \t   ${value}`);
-        if (typeof value == 'string') {
-          if (key == 'Q1') {
-            this.Q1 = JSON.parse(value);
-          }
-          if (key == 'LS') {
-            this.LS = JSON.parse(value);
-          }
-          //console.log(this.Q1);
-          //console.log(this.LS.length);
-        }
-      }
-    
-    console.log("Keys=" + Object.keys(this.weiObject));
+      // for (const [key, value] of Object.entries(this.priceObject)) {          
+      //   console.log(`${key} \t   ${value}`);
+      // }
+      // console.log("Keys=" + Object.keys(this.priceObject));
+
     this.bmObject.forEach(item => {
       for (let key in item) {
         //console.log(`${key}: ${item[key]}`)
-        this.bmArray.push(key,item[key]);        // key is a date when required can be changed to date
+        this.bmArray.push(key,item[key]);       
       }
     })
     
-    
-    for (var i=0 ; i< 1 ; i++ ) {
-        console.log(this.Q1[i]);
-        this.tt = this.Q1[1];
+    this.priceObject.forEach(item => {
+      for (let key in item) {
+        //console.log(`${key}: ${item[key]}`)
+        this.priceArray.push(key,item[key]);        
       }
-    
-    // for (const [key, value] of Object.entries(this.tt)) { 
-    //   console.log(`${key} \t   ${value}`);
-    // }
-
+    })
   }
-  
   
   onSubmit() : void {  
     this.loading = true;
@@ -289,17 +277,17 @@ renderPerformanceGrid() {
                   ];
   var grid = document.getElementById('grid') as any;
   var temp_fromdate =document.getElementById("from-date") as any;
-    this.fromDate=temp_fromdate.value;
-    var temp_todate=document.getElementById("to-date") as any;
-    this.toDate=temp_todate.value;
-    var benchMark = document.getElementById('selectBenchMark') as any;
-    var bMFlag : any = benchMark.value;
-    var spread = document.getElementById('spread') as any;
-    var spFlag : any = spread.value;
-    var selectFractile : any = document.getElementById("selectFractile") as any;
-    var fractileSelected : any = selectFractile.value;
-    var userFractileSelected = parseInt(fractileSelected, 10);
-    var userFractileSelected = userFractileSelected+2;
+  this.fromDate=temp_fromdate.value;
+  var temp_todate=document.getElementById("to-date") as any;
+  this.toDate=temp_todate.value;
+  var benchMark = document.getElementById('selectBenchMark') as any;
+  var bMFlag : any = benchMark.value;
+  var spread = document.getElementById('spread') as any;
+  var spFlag : any = spread.value;
+  var selectFractile : any = document.getElementById("selectFractile") as any;
+  var fractileSelected : any = selectFractile.value;
+  var userFractileSelected = parseInt(fractileSelected, 10);
+  var userFractileSelected = userFractileSelected+2;
 
   this.columnNames=[];
   this.columnNames.push({title:'Metric', field :fields[0] , width : 150})
@@ -426,7 +414,6 @@ generateChart() {
     return ret;
   }
 
-
   generateBMChart() { 
     //console.log("Inside generateBMChart");
     //console.log("Inside generateBMChart arrSize =" +this.bmArray.length);    
@@ -463,15 +450,36 @@ generateChart() {
    return ret;
   }
 
+  generatePriceChart() { 
+    const startDate = new Date(this.start_Date);      
+    const endDate = new Date(this.end_Date);
+   const ret = [];
+   const total = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+   this.dateArr1 = [];
+   for(var i=0;i< this.priceArray.length; i=i+2 ){         
+    this.dateArr1.push(this.priceArray[i]);
+   }
+  this.valArr1 = []; 
+   for(var i=1;i< this.priceArray.length; i=i+2 ){            
+    this.valArr1.push(this.priceArray[i]);
+   }
+   console.log("size of price array"+ this.priceArray.length);
+   for (let i = 0; i < 127 ; i++) {
+       const point = {
+            time : this.dateArr1[i]/1000,                        // time=1333584000 ::
+            value: this.valArr1[i]                               // value = 27.71 :: 
+       };
+       ret.push(point);
+   }
+   return ret;
+  }
 
   retrieveBenchMarks() : any{
-    console.log("Inside retrieveBenchMark");
     return fetch(`assets/santosh.json`)
       .then((response) => response.json())
       .then((data) => {
         return this.getBMData(data);
     });
   } 
-
 
 }
