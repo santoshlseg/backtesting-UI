@@ -109,8 +109,8 @@ weiObject : any = [];
 bmArray :any = [];
 priceArray : any = [];
 
-Q1 : any = [];
-LS : any = [];
+//Q1 : any = [];
+//LS : any = [];
 
 dateArr : any = [];
 valArr : any = [];
@@ -196,16 +196,8 @@ ngOnInit(): void {
           this.priceObject = JSON.parse(value);          
         }
       }
-      // else {
-      //   console.log("Non string Key here ");
-      //   console.log("key="+ key, "\n value=" +JSON.stringify(value));
-      // }
-    } 
-
-      // for (const [key, value] of Object.entries(this.priceObject)) {          
-      //   console.log(`${key} \t   ${value}`);
-      // }
-      // console.log("Keys=" + Object.keys(this.priceObject));
+    }
+      
 
     this.bmObject.forEach(item => {
       for (let key in item) {
@@ -362,16 +354,16 @@ renderPerformanceGrid(perfEntries : Object): void {
       if(key=='t-stat'){                                 
         this.tstat.push(item[key]);
       }
-      if(key=='Skewness'){                                // 
+      if(key=='Skewness'){                                 
         this.skewness.push(item[key]);
       }
-      if(key=='Kurtosis'){                                // 
+      if(key=='Kurtosis'){                                
         this.kurtosis.push(item[key]);
       }
-      if(key=='Hit Ratio'){                                // 
+      if(key=='Hit Ratio'){                                
         this.hitRatio.push(item[key]);
       }
-      if(key=='Maximum Drawdown'){                                // 
+      if(key=='Maximum Drawdown'){                           
         this.maxDrawdown.push(item[key]);
       }
 
